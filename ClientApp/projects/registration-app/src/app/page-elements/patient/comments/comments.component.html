@@ -1,0 +1,22 @@
+<div class="container body-content row" id="divSearch">
+  <div class="page-header">
+    <h3>Comments</h3>
+  </div>
+  <div
+    class="search-panel panel panel-default col-sm-3"
+    style="border-top-left-radius:13px;border-top-right-radius:13px;"
+  >
+    <form
+      name="CommentsForm"
+      role="form"
+      class="form-horizontal"
+      type="submit"
+      ng-keyup="($event.keyCode == 13)?submitForm():return"
+    >
+      <div class="input-group">
+        <div class="input-group-addon">Comments</div>
+        <input class="form-control" id="comments" />
+      </div>
+    </form>
+  </div>
+</div>;

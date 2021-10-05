@@ -1,0 +1,14 @@
+
+<table>
+  <thead>
+    <th>Name</th><th>Code</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let location of locations;" (click)="displayLocation(location.treatmentLocationId!)">
+      <td>{{location.location}}</td>
+      <td>{{location.code}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<button class="btn btn-primary" (click)="addLocation()">Add Location</button>

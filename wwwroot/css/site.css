@@ -1,0 +1,414 @@
+﻿
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.header-content {
+    border-bottom: 1px solid #eeeeee;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 5px;
+}
+
+label {
+    font-weight: normal;
+    padding-right: 10px !important;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.table {
+    margin-bottom: 0px !important;
+}
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+ul {
+    list-style-position: inside !important;
+}
+
+.center-content {
+    width: 600px;
+    margin: 0 auto;
+    vertical-align: central;
+}
+
+a:hover, input.btn:hover {
+    color: #ff3366 !important;
+}
+
+.navbar-fixed-top {
+    position: absolute !important;
+    z-index: 0 !important;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+}
+
+.navbar-text {
+    margin-top: 20px !important;
+    font-size: 18px;
+    margin-bottom: 0px !important;
+}
+
+.navbar-brand {
+    /*padding: 15px 15px;*/
+    padding-top: 15px !important;
+    padding-bottom: 0px !important;
+    font-size: 18px !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 30px !important;
+}
+
+.navbar-inverse {
+    border: none !important;
+    background-color: white !important;
+}
+
+.main-content-menu .active a {
+    background-color: #8b70b1 !important;
+    color: white !important;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #8b70b1 !important;
+    overflow: visible !important;
+}
+
+.main-content-menu a {
+    color: #555;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 8px 15px 8px 15px !important;
+    border-radius: 5px !important;
+    /*margin-right:15px !important;*/
+    margin: 5px !important;
+}
+
+.panel-primary {
+    border-color: #8b70b1 !important;
+}
+
+.panel-heading {
+    font-weight: bold !important;
+    border-top-right-radius: 13px;
+    border-top-left-radius: 13px;
+    /*background-color: pink !important;*/
+}
+
+
+
+
+/*.page-header {
+    margin: 0px !important;
+    padding: 0 !important;
+}*/
+
+.page-header h1, .page-header h2, .page-header h3, .page-header h3 {
+    margin: 0px !important;
+    display: inline-block;
+}
+
+.navbar {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.content-title {
+    padding-right: 5px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: gray;
+}
+
+.left-navigator {
+    width: 230px;
+    display: inline-block;
+    float: left;
+    border: none;
+    padding: 0px;
+    margin-top: 20px;
+    overflow: hidden;
+    /*border-right:1px solid #b0c4de;*/
+}
+
+.right-content {
+    width: 900px;
+    display: inline-block;
+    float: left;
+    margin: 10px 10px 10px 10px;
+}
+
+
+.search-panel {
+    width: 230px;
+    display: inline-block;
+    float: left;
+    border: 1px solid #eeeeee;
+    padding: 5px;
+    border-right: 1px solid #b0c4de;
+    margin-top: 10px;
+}
+
+    .search-panel label {
+        width: 150px;
+    }
+
+
+
+.list-group a {
+    /*padding:6px !important;*/
+    font-size: 14px !important;
+    font-weight: 700;
+}
+
+.list-group .therapy-line-list {
+    margin: 0px !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+    .list-group .therapy-line-list :first-child {
+        /*border-top:none !important;*/
+    }
+
+.list-group a.active {
+    background-color: #8b70b1 !important;
+    border: none !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.list-group .first-level a.active {
+    background-color: #8b70b1 !important;
+}
+
+.nav-buttons {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+.user-list {
+    float: left;
+    display: block;
+    width: 200px;
+}
+
+.user-detail {
+    float: left;
+    margin-left: 20px;
+}
+
+.searchclear {
+    position: absolute !important;
+    right: 5px !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    height: 14px !important;
+    margin: auto !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    color: gray !important;
+    z-index: 100 !important;
+}
+
+.loading-image {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: black transparent;
+    z-index: 20000;
+}
+
+    .loading-image img {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        /*background: url("img/transparent.png") repeat;*/
+        /*position:fixed;*/
+        /*bottom:0px;
+    right:0px;*/
+        top: 20%;
+        /*background: url("img/loading.gif") center center no-repeat;*/
+        overflow: visible;
+        /* background-color:#eeeeee;*/
+    }
+
+.modal-open {
+    overflow: scroll;
+}
+
+/**Date Picker*/
+div.ui-datepicker {
+    font-size: 12px;
+    z-index: 10000 !important;
+}
+
+input.datepicker {
+    /** width:100px;*/
+}
+
+/* tooltip */
+.tooltip-inner {
+    text-align: left;
+    max-width: 300px;
+}
+
+.tooltip {
+    overflow: visible !important;
+}
+
+
+.chosen-container-single {
+    min-width: 100px !important;
+}
+
+th {
+    text-align: center !important;
+}
+
+.chosen-container-multi {
+    min-width: 200px !important;
+}
+
+.inputTextMedium {
+    width: 150px !important;
+}
+
+.GenoTestHeight {
+    height: 68px !important;
+}
+
+.inputTextLong {
+    width: 300px !important;
+}
+
+.inputTextshort {
+    width: 100px !important;
+}
+
+
+.hiddentablerow {
+    padding: 0px 0px !important;
+}
+
+.accordion-toggle:after {
+    font-family: 'Glyphicons Halflings'; /* essential for enabling glyphicon */
+    content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+    color: grey; /* adjust as needed */
+}
+
+.accordion-opened .accordion-toggle:after {
+    content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+}
+
+.tblGenomic {
+    border: 1px thin Gray !important;
+}
+
+.app_version {
+    display: inline-block;
+    float: right;
+    font-size: 90%;
+    opacity: 0.4;
+    color: black;
+}
+
+.modal-dialog {
+    width: 800px !important;
+}
+
+
+.btn-search:hover {
+    color: #fff;
+    background-color: #8b70b1;
+    border-color: #79619b;
+}
+
+.btn-search {
+    color: #fff;
+    background-color: #8b70b1;
+    border-color: #79619b;
+}
+
+textarea {
+    resize: none;
+}
+
+ol.CS_Level1 {
+    counter-reset: list;
+}
+
+    ol.CS_Level1 > li {
+        list-style: none;
+    }
+
+        ol.CS_Level1 > li:before {
+            content: counter(list) ") ";
+            counter-increment: list;
+        }
+
+.panel-heading {
+    background-color: #E6E4E4 !important;
+    /*border-top-style: none !important;
+    border-top-color: white !important;*/
+}
+
+.borderless td, .borderless th {
+    border: none;
+}
+
+legend {
+    border-bottom: 0px !important;
+}
+
+#div_ProjectForm .chosen-container-single {
+    width: 200px !important;
+}
+
+#div_EditConsentForm .chosen-container-single {
+    width: 200px !important;
+}
+
+
+
+
+.chosen-container-multi {
+    min-width: 108px !important;
+}
+
+.input-group {
+    padding-bottom: 6px;
+}
+
+    .input-group .input-group-addon {
+        width: 110px;
+    }
+
+#timeLineTable tr td {
+    padding: 5px;
+}
+
+.listItem {
+    margin-bottom: 10px;
+}
+
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+}

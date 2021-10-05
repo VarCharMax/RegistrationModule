@@ -1,0 +1,36 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container  header-content">
+    <div class="navbar-header">
+      <a target="_self" class="navbar-brand">
+        <img
+          src="Content/img/RcDB_banner.png"
+          style="height:77px;width:500px; margin:0;padding:0;"
+        />
+      </a>
+    </div>
+    <div class="navbar-collapse collapse container-fluid" style="height:110px !important">
+      <div class="nav navbar-nav navbar-right">
+        <form
+          class="navbar-form"
+          role="search"
+          action="../Patient/Search"
+          method="get"
+          style="padding-top:30px"
+        >
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search patient ..."
+              id="SearchKeyword"
+              name="keyword"
+            />
+          </div>
+          <button class="btn btn-default" id="SearchButton" type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>;

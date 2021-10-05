@@ -1,0 +1,25 @@
+<div class="right-content panel panel-default" id="divSearchResult" style="margin-bottom: 0px; border-radius: 13px; display: block;" title="">
+	<div class="panel-heading" data-original-title="" title="">Search result</div>
+	<div class="panel-body" data-original-title="" title="">
+		<table class="table table-striped table-hover table-bordered searchResultTable" style="width:100% !important;">
+			<tbody>
+                <tr>
+                    <th style="width:100px !important">Project</th>
+                    <th style="width:100px !important">UIN</th>
+                    <th style="width:80px !important">Surname</th>
+                    <th style="width:80px !important">First name</th>
+                    <th style="width:80px !important">Date of birth</th>
+                    <th style="width:80px !important">Hospital UR</th>
+                </tr>
+                <tr *ngFor="let patient of patients;" (click)="goToPatientDetailsPage(patient.patientId!)" style="cursor:pointer">
+                    <td style="width:100px !important">{{ patient.project?.name }}</td>
+                    <td style="width:80px !important">{{ patient.patientUIN }}</td>
+                    <td style="width:80px !important">{{ patient.lastName }}</td>
+                    <td style="width:80px !important">{{ patient.firstName }}</td>
+                    <td style="width:80px !important"></td>
+                    <td style="width:80px !important">{{ patient.hospitalUR }}</td>
+                </tr>
+	        </tbody>
+        </table>
+	</div>
+</div>

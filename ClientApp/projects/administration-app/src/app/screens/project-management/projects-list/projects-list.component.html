@@ -1,0 +1,15 @@
+<table>
+  <thead>
+    <th>Name</th><th>URL</th><th>Token</th><th>Active</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let project of projects;" (click)="displayProject(project.projectId!)">
+      <td>{{project.name}}</td>
+      <td>{{project.url}}</td>
+      <td>{{project.token}}</td>
+      <td>{{project.isActive}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<button class="btn btn-default" (click)="addProject()">Add Project</button>

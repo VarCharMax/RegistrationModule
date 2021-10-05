@@ -1,0 +1,31 @@
+<div class="container body-content row" id="divSearch">
+  <div class="page-header">
+    <h3>Add Clinician</h3>
+  </div>
+  <div
+    class="search-panel panel panel-default col-md-8"
+    style="border-top-left-radius:13px;border-top-right-radius:13px;"
+  >
+    <form name="projectForm" role="form" class="form-horizontal" [formGroup]="clinicianCreateForm" (ngSubmit)="createClinician()">
+      <div class="input-group">
+        <div class="input-group-addon">First Name</div>
+        <input class="form-control" formControlName="firstName" id="firstName" />
+        <span
+              *ngIf="!clinicianCreateForm.get('firstName')?.valid && clinicianCreateForm.get('firstName')?.touched"
+              class="help-block">This field is required.
+          </span>
+      </div>
+      <div class="input-group">
+        <div class="input-group-addon">Last Name</div>
+        <input class="form-control" formControlName="lastName" id="lastName" />
+        <span
+              *ngIf="!clinicianCreateForm.get('lastName')?.valid && clinicianCreateForm.get('lastName')?.touched"
+              class="help-block">This field is required.
+          </span>
+      </div>
+      <button class="btn btn-default">Add</button>
+    </form>
+  </div>
+</div>
+
+

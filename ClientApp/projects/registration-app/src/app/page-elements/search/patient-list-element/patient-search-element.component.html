@@ -1,0 +1,8 @@
+<tr *ngFor="let patient of patients;" (click)="GoToPatientDetailsPage(patient.patientId!)" style="cursor:pointer">
+	<td style="width:100px !important">{{ patient.project?.name }}</td>
+	<td style="width:80px !important">{{ patient.patientUIN }}</td>
+	<td style="width:80px !important">{{ patient.lastName }}</td>
+	<td style="width:80px !important">{{ patient.firstName }}</td>
+	<td style="width:80px !important"></td>
+	<td style="width:80px !important">{{ patient.hospitalUR }}</td>
+</tr>

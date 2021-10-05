@@ -1,0 +1,29 @@
+<div class="container body-content row" id="divSearch">
+  <div class="page-header">
+    <h3>Add Location</h3>
+  </div>
+  <div
+    class="search-panel panel panel-default col-md-8"
+    style="border-top-left-radius:13px;border-top-right-radius:13px;"
+  >
+    <form name="projectForm" role="form" class="form-horizontal" [formGroup]="locationCreateForm" (ngSubmit)="createLocation()">
+      <div class="input-group">
+        <div class="input-group-addon">First Name</div>
+        <input class="form-control" formControlName="location" id="location" />
+        <span
+              *ngIf="!locationCreateForm.get('location')?.valid && locationCreateForm.get('location')?.touched"
+              class="help-block">This field is required.
+          </span>
+      </div>
+      <div class="input-group">
+        <div class="input-group-addon">Code</div>
+        <input class="form-control" formControlName="code" id="code" />
+        <span
+              *ngIf="!locationCreateForm.get('code')?.valid && locationCreateForm.get('code')?.touched"
+              class="help-block">This field is required.
+          </span>
+      </div>
+      <button class="btn btn-primary">Add</button>
+    </form>
+  </div>
+</div>

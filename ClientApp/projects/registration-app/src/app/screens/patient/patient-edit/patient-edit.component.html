@@ -1,0 +1,177 @@
+<div id="div_patientDetails_content" title="">
+    <div class="page-header" id="demographicsAndSummaryPageHeader" title="" style="margin-top: 30px;">
+        <h1><small>Edit Patient</small></h1>
+    </div>
+    <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" title="">
+        <div class="panel-heading" title="">
+            Patient Details
+        </div>
+        <form [formGroup]="patientEditForm" (ngSubmit)="updatePatient()">
+            <div class="panel-body" title="">
+                <table class="table-hover table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>UIN</td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medicare Number</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="middleName"
+                                formControlName="middleName"
+                                class="form-control">
+                            </td>
+                            <td></td>
+                            <td>Last name</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="lastName"
+                                formControlName="lastName"
+                                class="form-control">
+                            <span
+                                *ngIf="!patientEditForm.get('lastName')?.valid && patientEditForm.get('lastName')?.touched"
+                                class="help-block">This field is required.
+                            </span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>First name</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="firstName"
+                                formControlName="firstName"
+                                class="form-control">
+                                <span
+                                    *ngIf="!patientEditForm.get('firstName')?.valid && patientEditForm.get('firstName')?.touched"
+                                    class="help-block">This field is required.
+                                </span>
+                            </td>
+                            <td></td>
+                            <td>Middle initial</td>
+                            <td>
+                            {{patient.middle}}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <u>Date of birth</u>
+                            <td>
+                                <input
+                                type="text"
+                                id="dob"
+                                formControlName="dob"
+                                class="form-control">
+                            <span
+                                *ngIf="!patientEditForm.get('dob')?.valid && patientEditForm.get('dob')?.touched"
+                                class="help-block">This field is required.
+                            </span>
+                            </td>
+                            <td></td>
+                            <td><div title="">Gender</div></td>
+                            <td>
+                                <label for="sex">Sex</label>
+                                <select formControlName="sex" (change)="changeSex($event)">
+                                    <option *ngFor="let sex of sexes" [ngValue]="sex.sexId">{{sex.description}}</option>
+                                </select>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+       
+
+        <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" title="">
+            <div class="panel-heading" title="">Treatment Location</div>
+            <div class="panel-body" title="">
+                <table class="table-hover table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>Primary enrolling Hospital</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="hospital"
+                                formControlName="hospital"
+                                class="form-control">
+                            <span
+                                *ngIf="!patientEditForm.get('hospital')?.valid && patientEditForm.get('hospital')?.touched"
+                                class="help-block">This field is required.
+                            </span>
+                            </td>
+                            <td></td>
+                            <td>Hospital UR</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="hospitalUR"
+                                formControlName="hospitalUR"
+                                class="form-control">
+                            <span
+                                *ngIf="!patientEditForm.get('hospitalUR')?.valid && patientEditForm.get('hospitalUR')?.touched"
+                                class="help-block">This field is required.
+                            </span>
+                            </td>
+                            <td></td>
+                        </tr>
+    
+                        <tr>
+                            <td>Consenting Clinician</td>
+                            <td>
+                                <select formControlName="clinician" (change)="changeClinician($event)">
+                                    <option *ngFor="let clinician of clinicians" [ngValue]="clinician.clinicianId">{{clinician.firstName}} {{clinician.lastName}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Name of study co-ordinator</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="studyCoordinator"
+                                formControlName="studyCoordinator"
+                                class="form-control">
+                            </td>
+                            <td></td>
+                            <td>Study co-ordinator phone</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="coordinatorPhone"
+                                formControlName="coordinatorPhone"
+                                class="form-control">
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" title="">
+            <div class="panel-heading" title="">Comments</div>
+            <div class="panel-body" title="">
+                <table class="table-hover table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input
+                                type="text"
+                                id="coordinatorPhone"
+                                formControlName="coordinatorPhone"
+                                class="form-control">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!patientEditForm.valid">Submit</button>
+    </form>
+</div>

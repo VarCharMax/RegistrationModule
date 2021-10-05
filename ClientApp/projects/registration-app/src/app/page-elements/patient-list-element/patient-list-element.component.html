@@ -1,0 +1,6 @@
+<a
+    [routerLink]="['/patient', patient.patientId]"
+      href="#"
+      class="list-group-item">
+      {{ patient.firstName }} {{ patient.lastName }} {{ patient.patientSex?.description}} {{ patient.doctor?.firstName }} {{ patient.doctor?.lastName }}
+</a>

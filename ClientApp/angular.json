@@ -1,0 +1,249 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "a77cd026-5403-42c4-bf39-80c8cf0e1e82"
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "registrationApp": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:component": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/registration-app",
+      "sourceRoot": "projects/registration-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/registrationApp",
+            "index": "projects/registration-app/src/index.html",
+            "main": "projects/registration-app/src/main.ts",
+            "polyfills": "projects/registration-app/src/polyfills.ts",
+            "tsConfig": "projects/registration-app/tsconfig.app.json",
+            "assets": [
+              "projects/registration-app/src/favicon.ico",
+              "projects/registration-app/src/assets"
+            ],
+            "styles": [
+              "projects/registration-app/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/registration-app/src/environments/environment.ts",
+                  "with": "projects/registration-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "registrationApp:build:production"
+            },
+            "development": {
+              "browserTarget": "registrationApp:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "registrationApp:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/registration-app/src/test.ts",
+            "polyfills": "projects/registration-app/src/polyfills.ts",
+            "tsConfig": "projects/registration-app/tsconfig.spec.json",
+            "karmaConfig": "projects/registration-app/karma.conf.js",
+            "assets": [
+              "projects/registration-app/src/favicon.ico",
+              "projects/registration-app/src/assets"
+            ],
+            "styles": [
+              "projects/registration-app/src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    },
+    "administrationApp": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:component": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/administration-app",
+      "sourceRoot": "projects/administration-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/administrationApp",
+            "index": "projects/administration-app/src/index.html",
+            "main": "projects/administration-app/src/main.ts",
+            "polyfills": "projects/administration-app/src/polyfills.ts",
+            "tsConfig": "projects/administration-app/tsconfig.app.json",
+            "assets": [
+              "projects/administration-app/src/favicon.ico",
+              "projects/administration-app/src/assets"
+            ],
+            "styles": [
+              "projects/administration-app/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/administration-app/src/environments/environment.ts",
+                  "with": "projects/administration-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "administrationApp:build:production"
+            },
+            "development": {
+              "browserTarget": "administrationApp:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "administrationApp:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/administration-app/src/test.ts",
+            "polyfills": "projects/administration-app/src/polyfills.ts",
+            "tsConfig": "projects/administration-app/tsconfig.spec.json",
+            "karmaConfig": "projects/administration-app/karma.conf.js",
+            "assets": [
+              "projects/administration-app/src/favicon.ico",
+              "projects/administration-app/src/assets"
+            ],
+            "styles": [
+              "projects/administration-app/src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "administrationApp"
+}
