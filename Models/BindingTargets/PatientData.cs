@@ -8,7 +8,6 @@ namespace RegistrationModule.Models.BindingTargets
     {
         [Required]
         public string PatientUIN { get => Patient.PatientUIN; set => Patient.PatientUIN = value; }
-        [Required]
         public string HospitalUR { get => Patient.HospitalUR; set => Patient.HospitalUR = value; }
         [Required]
         public string Hospital { get => Patient.Hospital; set => Patient.Hospital = value; }
@@ -21,9 +20,7 @@ namespace RegistrationModule.Models.BindingTargets
         public DateTime DOB { get => Patient.DOB; set => Patient.DOB = value; }
         public string EstDOB { get => Patient.EstDOB; set => Patient.EstDOB = value; }
         public Sex PatientSex { get => Patient.PatientSex; set => Patient.PatientSex = value; }
-        [Required]
         public string MedicareNo { get => Patient.MedicareNo; set => Patient.MedicareNo = value; }
-        [Required]
         public string PostCode { get => Patient.PostCode; set => Patient.PostCode = value; }
         public TreatmentLocation Location { get => Patient.Location; set => Patient.Location = value; }
         public Clinician Doctor { get => Patient.Doctor; set => Patient.Doctor = value; }
@@ -40,6 +37,7 @@ namespace RegistrationModule.Models.BindingTargets
         public bool HasConsented { get => Patient.HasConsented; set => Patient.HasConsented = value; }
         public DateTime ConsentDate { get => Patient.ConsentDate; set => Patient.ConsentDate = value; }
         public Project Project { get => Patient.Project; set => Patient.Project = value; }
+        public string StudyId { get => Patient.StudyId; set => Patient.StudyId = value; }
 
         public Patient Patient { get; set; } = new Patient();
      }

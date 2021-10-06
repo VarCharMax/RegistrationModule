@@ -1,8 +1,7 @@
-import { Injectable, OnDestroy } from '@angular/core';
-
 import { Clinician } from 'projects/models/clinician.model';
 import { Filter } from './configClasses.repository';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Patient } from 'projects/models/patient.model';
 import { Project } from 'projects/models/project.model';
 import { Role } from 'projects/models/role.model';
@@ -18,7 +17,7 @@ const treatmentLocationsUrl = 'api/treatmentlocations';
 const projectsUrl = 'api/projects';
 
 @Injectable()
-export class Repository implements OnDestroy {
+export class Repository {
   private clinicians: Clinician[] = [];
   private projects: Project[] = [];
   private treatmentLocations: TreatmentLocation[] = [];
@@ -198,6 +197,7 @@ export class Repository implements OnDestroy {
       studyCoordinator: patient.studyCoordinator,
       studyCoordinatorPhone: patient.studyCoordinatorPhone,
       comments: patient.comments,
+      studyId: patient.studyId,
       isActive: patient.isActive,
       deleteComment: patient.deleteComment,
       restoreComment: patient.restoreComment,
@@ -278,6 +278,7 @@ export class Repository implements OnDestroy {
       institution: patient.institution,
       studyCoordinator: patient.studyCoordinator,
       studyCoordinatorPhone: patient.studyCoordinatorPhone,
+      studyId: patient.studyId,
       comments: patient.comments,
       isActive: patient.isActive,
       deleteComment: patient.deleteComment,
@@ -374,12 +375,5 @@ export class Repository implements OnDestroy {
     this.http
       .patch(`${treatmentLocationsUrl}/${id}`, patch)
       .subscribe(() => this.getTreatmentLocation(id));
-  }
-
-  ngOnDestroy(): void {
-    // Note: Because this class is a singleton, this does not get called.
-    console.log('In repo destroy');
-    // this.patientsSub.unsubscribe();
-    // this.sexesSub.unsubscribe();
   }
 }

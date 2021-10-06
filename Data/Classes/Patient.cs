@@ -31,5 +31,6 @@ namespace RegistrationModule.Data.Classes
         public bool HasConsented { get; set; }
         public DateTime ConsentDate { get; set; }
         public Project Project { get; set; }
+        public string StudyId { get; set; }
     }
 }

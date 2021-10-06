@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { CanComponentDeactivate } from './../../../services/can-deactivate-guard.service';
 import { Clinician } from 'projects/models/clinician.model';
 import { Patient } from 'projects/models/patient.model';
+import { Project } from 'projects/models/project.model';
 import { Repository } from 'projects/modules/repository';
 import { Sex } from 'projects/models/sex.model';
 import { TreatmentLocation } from 'projects/models/treatmentlocation.model';
@@ -19,6 +20,7 @@ import { formatDate } from '@angular/common';
 export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private sexListSub: Subscription = new Subscription();
   private patientSub: Subscription = new Subscription();
+  private projectListSub: Subscription = new Subscription();
   private cliniciansListSub: Subscription = new Subscription();
   private locationsListSub: Subscription = new Subscription();
   private patientChanged: Subscription = new Subscription();
@@ -27,11 +29,13 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
   patient: Patient = new Patient();
   changesSaved = false;
   patientEditForm: FormGroup = new FormGroup({});
+  projects: Project[] = [];
   sexes: Sex[] = [];
   clinicians: Clinician[] = [];
   treatmentLocations: TreatmentLocation[] = [];
   institutions = ['Public', 'Private'];
   estimatedDOB = ['A', 'D', 'DM', 'DMY', 'DY', 'MY', 'Y'];
+  consents = [true, false];
 
   constructor(
     private repo: Repository,
@@ -43,7 +47,7 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
 
     this.patientEditForm = new FormGroup({
       patientUIN: new FormControl(null, Validators.required),
-      hospital: new FormControl(null, Validators.required),
+      hospital: new FormControl(null),
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
       middleName: new FormControl(null),
@@ -53,12 +57,17 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
       clinician: new FormControl(null),
       treatmentLocation: new FormControl(0),
       institution: new FormControl(null),
-      hospitalUR: new FormControl(null, Validators.required),
-      postcode: new FormControl(null, Validators.required),
-      medicareNo: new FormControl(null, Validators.required),
+      hospitalUR: new FormControl(null),
+      postcode: new FormControl(null),
+      medicareNo: new FormControl(null),
       studyCoordinator: new FormControl(null),
       studyCoordinatorPhone: new FormControl(null),
       comments: new FormControl(null),
+      project: new FormControl(null),
+      studyId: new FormControl(null),
+      subStudyParticipation: new FormControl(null),
+      consent: new FormControl(null),
+      consentDate: new FormControl(null)
     });
 
     this.patientSub = this.route.data.subscribe((data: Data) => {
@@ -82,7 +91,16 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
         'studyCoordinator': this.patient.studyCoordinator,
         'studyCoordinatorPhone': this.patient.studyCoordinatorPhone,
         'comments': this.patient.comments,
+        'project': this.patient.project?.projectId,
+        'studyId': this.patient.studyId,
+        'subStudyParticipation': '',
+        'consent': this.patient.hasConsented,
+        'consentDate': this.patient.consentDate
       });
+    });
+
+    this.projectListSub = this.route.data.subscribe((data: Data) => {
+      this.projects = data['projects'];
     });
 
     this.sexListSub = this.route.data.subscribe((data: Data) => {
@@ -132,6 +150,12 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
     });
   }
 
+  changeProject(e: any) {
+    this.patientEditForm.get('project')?.setValue(e.target.value, {
+      onlySelf: true,
+    });
+  }
+  
   updatePatient() {
 
     if (this.patientEditForm.valid)
@@ -170,12 +194,15 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
         this.patientEditForm.get('institution')?.value,
         this.patientEditForm.get('studyCoordinator')?.value,
         this.patientEditForm.get('studyCoordinatorPhone')?.value,
-        // this.patientEditForm.get('comments')?.value,
+        this.patientEditForm.get('comments')?.value,
+        this.projects.find((p) => p.projectId == parseInt(this.patientEditForm.get('project')?.value)),
+        this.patientEditForm.get('studyId')?.value,
+        true,
       ); 
 
       // BUG: Can't seem to save comments via constructor. For some reason, they get saved to the isActive property.
-        patient.comments = this.patientEditForm.get('comments')?.value;
-
+        // patient.comments = this.patientEditForm.get('comments')?.value;
+          console.log(patient)
         this.repo.replacePatient(patient);
     }
   }
@@ -195,5 +222,6 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
     this.sexListSub.unsubscribe();
     this.cliniciansListSub.unsubscribe();
     this.locationsListSub.unsubscribe();
+    this.projectListSub.unsubscribe();
   }
 }

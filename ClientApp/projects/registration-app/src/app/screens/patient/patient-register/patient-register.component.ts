@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { CanComponentDeactivate } from './../../../services/can-deactivate-guard.service';
 import { Clinician } from 'projects/models/clinician.model';
 import { Patient } from 'projects/models/patient.model';
+import { Project } from 'projects/models/project.model';
 import { Repository } from 'projects/modules/repository';
 import { Sex } from 'projects/models/sex.model';
 import { TreatmentLocation } from 'projects/models/treatmentlocation.model';
@@ -20,6 +21,7 @@ export class PatientRegisterComponent
   implements OnInit, CanComponentDeactivate, OnDestroy
 {
   private sexListSub: Subscription = new Subscription();
+  private projectListSub: Subscription = new Subscription();
   private cliniciansListSub: Subscription = new Subscription();
   private locationsListSub: Subscription = new Subscription();
   private patientsChanged: Subscription = new Subscription();
@@ -31,9 +33,11 @@ export class PatientRegisterComponent
   changesSaved = false;
   sexes: Sex[] = [];
   clinicians: Clinician[] = [];
+  projects: Project[] = [];
   treatmentLocations: TreatmentLocation[] = [];
   institutions = ['Public', 'Private'];
   estimatedDOB = ['A', 'D', 'DM', 'DMY', 'DY', 'MY', 'Y'];
+  consents = [true, false];
 
   constructor(
     private repo: Repository,
@@ -44,7 +48,7 @@ export class PatientRegisterComponent
   ngOnInit(): void {
     this.patientRegistrationForm = new FormGroup({
       patientUIN: new FormControl(null, Validators.required),
-      hospital: new FormControl(null, Validators.required),
+      hospital: new FormControl(null),
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
       middleName: new FormControl(null),
@@ -54,12 +58,21 @@ export class PatientRegisterComponent
       clinician: new FormControl(0),
       treatmentLocation: new FormControl(0),
       institution: new FormControl(null),
-      hospitalUR: new FormControl(null, Validators.required),
-      postcode: new FormControl(null, Validators.required),
-      medicareNo: new FormControl(null, Validators.required),
+      hospitalUR: new FormControl(null),
+      postcode: new FormControl(null),
+      medicareNo: new FormControl(null),
       studyCoordinator: new FormControl(null),
       studyCoordinatorPhone: new FormControl(null),
       comments: new FormControl(null),
+      project: new FormControl(null),
+      studyId: new FormControl(null),
+      subStudyParticipation: new FormControl(null),
+      consent: new FormControl(null),
+      consentDate: new FormControl(null)
+    });
+
+    this.projectListSub = this.route.data.subscribe((data: Data) => {
+      this.projects = data['projects'];
     });
 
     this.sexListSub = this.route.data.subscribe((data: Data) => {
@@ -106,6 +119,11 @@ export class PatientRegisterComponent
       'studyCoordinator': '',
       'studyCoordinatorPhone': '',
       'comments': '',
+      'project': 0,
+      'studyId': '',
+      'subStudyParticipation': '',
+      'consent': '',
+      'consentDate': ''
     });
   }
 
@@ -152,6 +170,12 @@ export class PatientRegisterComponent
     });
   }
 
+  changeProject(e: any) {
+    this.patientRegistrationForm.get('project')?.setValue(e.target.value, {
+      onlySelf: true,
+    });
+  }
+
   savePatient() {
     let clinicianId = parseInt(this.patientRegistrationForm.get('clinician')?.value);
 
@@ -194,9 +218,14 @@ export class PatientRegisterComponent
         this.patientRegistrationForm.get('institution')?.value,
         this.patientRegistrationForm.get('studyCoordinator')?.value,
         this.patientRegistrationForm.get('studyCoordinatorPhone')?.value,
-        this.patientRegistrationForm.get('comments')?.value
+        this.patientRegistrationForm.get('comments')?.value,
+        this.projects.find((p) => p.projectId == parseInt(this.patientRegistrationForm.get('project')?.value)),
+        this.patientRegistrationForm.get('studyId')?.value,
+        true,
+        ''
       );
-
+        
+      console.log(patient);
       this.repo.createPatient(JSON.parse(JSON.stringify(patient)));
     }
   }
@@ -215,5 +244,6 @@ export class PatientRegisterComponent
     this.locationsListSub.unsubscribe();
     this.errorsChanged.unsubscribe();
     this.patientsChanged.unsubscribe();
+    this.projectListSub.unsubscribe();
   }
 }
