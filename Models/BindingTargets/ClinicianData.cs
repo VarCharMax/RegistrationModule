@@ -8,7 +8,7 @@ namespace RegistrationModule.Models.BindingTargets
         [Required]
         public string FirstName { get => Clinician.FirstName; set => Clinician.FirstName = value; }
         [Required]
-        public string LastName { get; set; }
+        public string LastName { get => Clinician.LastName; set => Clinician.LastName = value; }
 
         public Clinician Clinician { get; set; } = new Clinician();
     }
