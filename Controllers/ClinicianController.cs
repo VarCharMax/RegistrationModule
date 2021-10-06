@@ -89,7 +89,7 @@ namespace RegistrationModule.Controllers
             if (ModelState.IsValid && TryValidateModel(cdata))
             {
 
-
+                
                 await context.SaveChangesAsync();
 
                 return Ok();

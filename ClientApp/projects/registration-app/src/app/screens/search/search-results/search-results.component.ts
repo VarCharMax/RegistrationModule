@@ -21,7 +21,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   goToPatientDetailsPage(id: number) {
-    this.router.navigate(['/patient', id]);
+    this.router.navigate(['/patient', id, 'edit'], { relativeTo: this.route });
   }
 
     ngOnDestroy(): void {

@@ -9,6 +9,7 @@ import { Patient } from 'projects/models/patient.model';
 import { Repository } from 'projects/modules/repository';
 import { Sex } from 'projects/models/sex.model';
 import { TreatmentLocation } from 'projects/models/treatmentlocation.model';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-patient-register',
@@ -25,7 +26,6 @@ export class PatientRegisterComponent
   private errorsChanged: Subscription = new Subscription();
   private patientSexId: number = 0;
   private treatmentLocationId: number = 0;
-  private patientClinicianId: number = 0;
   errors: { [label: string]: Array<string> } = {};
   patientRegistrationForm: FormGroup = new FormGroup({});
   changesSaved = false;
@@ -58,7 +58,7 @@ export class PatientRegisterComponent
       postcode: new FormControl(null, Validators.required),
       medicareNo: new FormControl(null, Validators.required),
       studyCoordinator: new FormControl(null),
-      coordinatorPhone: new FormControl(null),
+      studyCoordinatorPhone: new FormControl(null),
       comments: new FormControl(null),
     });
 
@@ -77,13 +77,11 @@ export class PatientRegisterComponent
     this.patientsChanged = this.repo.patientsChanged.subscribe((p) => {
       this.changesSaved = true;
       this.patientRegistrationForm.reset();
-      this.router.navigate(['..'], { relativeTo: this.route });
+      // this.router.navigate(['..'], { relativeTo: this.route });
     });
 
     this.errorsChanged = this.repo.errorsChanged.subscribe((e) => {
       this.errors = e;
-      // console.log('Errors:' + this.errors.hasOwnProperty('Middle'));
-      // console.log(this.errors['Middle'][0]);
     });
 
     this.setDefaults();
@@ -91,23 +89,23 @@ export class PatientRegisterComponent
 
   setDefaults() {
     this.patientRegistrationForm.setValue({
-      patientUIN: '',
-      hospital: '',
-      firstName: '',
-      lastName: '',
-      middleName: '',
-      sex: 0,
-      dob: '',
-      estdob: 0,
-      clinician: 0,
-      treatmentLocation: 0,
-      institution: '',
-      hospitalUR: '',
-      postcode: '',
-      medicareNo: '',
-      studyCoordinator: '',
-      coordinatorPhone: '',
-      comments: '',
+      'patientUIN': '',
+      'hospital': '',
+      'firstName': '',
+      'lastName': '',
+      'middleName': '',
+      'sex': 0,
+      'dob': '',
+      'estdob': '0',
+      'clinician': 0,
+      'treatmentLocation': 0,
+      'institution': 'Public',
+      'hospitalUR': '',
+      'postcode': '',
+      'medicareNo': '',
+      'studyCoordinator': '',
+      'studyCoordinatorPhone': '',
+      'comments': '',
     });
   }
 
@@ -157,20 +155,17 @@ export class PatientRegisterComponent
   savePatient() {
     let clinicianId = parseInt(this.patientRegistrationForm.get('clinician')?.value);
 
-    /*
     if (this.patientSexId === 0)
     {
-      this.patientRegistrationForm.setErrors({ invalidSex: true });
+      //this.patientRegistrationForm.setErrors({ invalidSex: true });
     }
-    */
 
     if (clinicianId === 0) {
-      this.patientRegistrationForm.setErrors({ invalidClinician: true });
+      //this.patientRegistrationForm.setErrors({ invalidClinician: true });
     }
 
-    if (!this.patientRegistrationForm.valid) {
-      alert('Not valid');
-    } else {
+    if (this.patientRegistrationForm.valid)
+    {
       const patient = new Patient(
         0,
         this.patientRegistrationForm.get('patientUIN')?.value,
@@ -178,8 +173,8 @@ export class PatientRegisterComponent
         this.patientRegistrationForm.get('hospital')?.value,
         this.patientRegistrationForm.get('firstName')?.value,
         this.patientRegistrationForm.get('lastName')?.value,
-        this.patientRegistrationForm.get('middle')?.value,
-        new Date(), //this.patientRegistrationForm.get('dob')?.value
+        this.patientRegistrationForm.get('middleName')?.value,
+        new Date(),
         this.patientRegistrationForm.get('estdob')?.value,
         this.sexes.find(
           (s) => s.sexId === parseInt(this.patientRegistrationForm.get('sex')?.value)
@@ -199,7 +194,7 @@ export class PatientRegisterComponent
         this.patientRegistrationForm.get('institution')?.value,
         this.patientRegistrationForm.get('studyCoordinator')?.value,
         this.patientRegistrationForm.get('studyCoordinatorPhone')?.value,
-        this.patientRegistrationForm.get('comment')?.value
+        this.patientRegistrationForm.get('comments')?.value
       );
 
       this.repo.createPatient(JSON.parse(JSON.stringify(patient)));

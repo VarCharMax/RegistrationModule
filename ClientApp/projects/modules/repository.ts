@@ -193,14 +193,14 @@ export class Repository implements OnDestroy {
       location: patient.location,
       doctor: patient.doctor,
       dob: patient.dob,
-      estDOB: patient.estdob,
+      estDOB: patient.estDOB,
       institution: patient.institution,
       studyCoordinator: patient.studyCoordinator,
       studyCoordinatorPhone: patient.studyCoordinatorPhone,
+      comments: patient.comments,
       isActive: patient.isActive,
       deleteComment: patient.deleteComment,
       restoreComment: patient.restoreComment,
-      comments: patient.comments,
       project: patient.project,
       subStudyParticipation: patient.subStudyParticipation,
       hasConsented: patient.hasConsented,
@@ -258,50 +258,36 @@ export class Repository implements OnDestroy {
   }
 
   /*
-    createProductAndSupplier(prod: Product, supp: Supplier) {
-        let data = {
-            name: supp.name, city: supp.city, state: supp.state
-        };
-
-        this.http.post<number>(suppliersUrl, data)
-          .subscribe(id => {
-              supp.supplierId = id;
-              prod.supplier = supp;
-              this.suppliers.push(supp);
-              if (prod != null) {
-                  this.createProduct(prod);
-              }
-          });
-    }
-    */
-
-  /*
    * Replace Entity
    */
   replacePatient(patient: Patient) {
     let data = {
-      firstName: patient.firstName,
-      lastName: patient.lastName,
       patientUIN: patient.patientUIN,
       hospitalUR: patient.hospitalUR,
+      hospital: patient.hospital,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
       middle: patient.middle,
+      dob: patient.dob,
+      estDOB: patient.estDOB,
       patientSex: patient.patientSex,
       medicareNo: patient.medicareNo,
       postCode: patient.postCode,
       location: patient.location,
       doctor: patient.doctor,
+      institution: patient.institution,
       studyCoordinator: patient.studyCoordinator,
       studyCoordinatorPhone: patient.studyCoordinatorPhone,
+      comments: patient.comments,
       isActive: patient.isActive,
       deleteComment: patient.deleteComment,
       restoreComment: patient.restoreComment,
-      comments: patient.comments,
       project: patient.project,
       subStudyParticipation: patient.subStudyParticipation,
       hasConsented: patient.hasConsented,
       consentDate: patient.consentDate,
     };
-
+    console.log(data);
     this.http
       .put(`${patientsUrl}/${patient.patientId}`, data)
       .subscribe(() => this.getPatients());

@@ -4,45 +4,45 @@
         <h3>Search Patient</h3>
     </div>
     <div class="search-panel panel panel-default col-sm-3" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
-        <form name="SearchForm" role="form" class="form-horizontal" (ngSubmit)="showSearchResults()" #f="ngForm">
+        <form name="SearchForm" role="form" class="form-horizontal" [formGroup]="patientSearchForm" (ngSubmit)="showSearchResults()" #f="ngForm">
             <div class="input-group" >
                 <div class="input-group-addon" >Surname</div>
-                <input name="lastName" class="form-control" id="lastname" ngModel>
+                <input formControlName="lastName" class="form-control" id="lastname">
             </div>
             <div class="input-group" >
                 <div class="input-group-addon"  >First Name</div>
-                <input name="firstName" class="form-control" id="firstName" ngModel>
+                <input formControlName="firstName" class="form-control" id="firstName">
             </div>
             <div class="input-group" >
                 <div class="input-group-addon" >Patient UIN</div>
-                <input name="patientUIN" class="form-control" id="uiNum" ngModel>
+                <input formControlName="patientUIN" class="form-control" id="uiNum">
             </div>
             <div class="input-group" >
                 <div class="input-group-addon" >Hospital UR</div>
-                <input name="hospitalUR" class="form-control" id="urNum" ngModel>
+                <input formControlName="hospitalUR" class="form-control" id="urNum">
             </div>
             <div class="input-group" >
                 <div class="input-group-addon" >Date of Birth</div>
-                <input name="dob" id="tbDob" class="datepicker form-control" ngModel>
+                <input formControlName="dob" id="tbDob" class="form-control">
             </div>
             <div class="input-group" >
                 <div class="input-group-addon" style="width:110px !important;" >Projects</div>
-                    <select class="form-control" id="project" name="project" style="width: 100px;" ngModel (ngModelChange)="onProjectChanged($event)">
+                    <select class="form-control" id="project" formControlName="project" style="width: 100px;" (ngModelChange)="onProjectChanged($event)">
                         <option [ngValue]="0">Please select ...</option>
                         <option *ngFor="let project of projects" [ngValue]="project.projectId">{{project.name}}</option>
                     </select>
                 </div>
             <div class="input-group"  >
-                <button type="reset" class="btn btn-default" (click)="resetValue()">Clear</button>
+                <button type="reset" class="btn btn-danger" (click)="resetValue()">Clear</button>
                 &nbsp;&nbsp;
-                <button class="btn btn-default" style="width:100px;" type="submit">Search</button>
+                <button class="btn btn-primary" style="width:100px;" type="submit">Search</button>
             </div>
-            <div class="alert alert-warning" id="search-warning-text" style="text-align: center; margin-bottom:0;padding:5px;" >
+            <div *ngIf="!hasDoneSearch" class="alert alert-warning" id="search-warning-text" style="text-align: center; margin-bottom:0;padding:5px;" >
                 <i class="glyphicon glyphicon-warning-sign"></i> <span></span>
             </div>
         </form>
         <div>
-            <button [disabled]="!hasDoneSearch" class="btn btn-search" style="width:100%;margin-top:10px;" id="btnNewPatient" (click)="createNewPatient()"><span class="glyphicon glyphicon-plus"> </span> New Patient</button>
+            <button [disabled]="!hasDoneSearch" class="btn btn-success" style="width:100%;margin-top:10px;" id="btnNewPatient" (click)="createNewPatient()"><span class="glyphicon glyphicon-plus"> </span> New Patient</button>
         </div>
     </div>
 </div>

@@ -9,6 +9,7 @@ import { Patient } from 'projects/models/patient.model';
 import { Repository } from 'projects/modules/repository';
 import { Sex } from 'projects/models/sex.model';
 import { TreatmentLocation } from 'projects/models/treatmentlocation.model';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-patient-edit',
@@ -17,11 +18,11 @@ import { TreatmentLocation } from 'projects/models/treatmentlocation.model';
 })
 export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private sexListSub: Subscription = new Subscription();
+  private patientSub: Subscription = new Subscription();
   private cliniciansListSub: Subscription = new Subscription();
   private locationsListSub: Subscription = new Subscription();
   private patientChanged: Subscription = new Subscription();
   private errorsChanged: Subscription = new Subscription();
-  private patientId: number = 0;
   errors: { [label: string]: Array<string> } = {};
   patient: Patient = new Patient();
   changesSaved = false;
@@ -39,73 +40,6 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
   ) {}
 
   ngOnInit(): void {
-    this.sexListSub = this.route.data.subscribe((data: Data) => {
-      this.sexes = data['sexes'];
-    });
-
-    this.cliniciansListSub = this.route.data.subscribe((data: Data) => {
-      this.clinicians = data['clinicians'];
-    });
-
-    this.locationsListSub = this.route.data.subscribe((data: Data) => {
-      this.treatmentLocations = data['treatmentlocations'];
-    });
-
-    this.errorsChanged = this.repo.errorsChanged.subscribe((e) => {
-      this.errors = e;
-    });
-
-    this.patientChanged = this.repo.patientChanged.subscribe((p) => {
-      // console.log(p);
-      this.patient = p;
-
-      this.patientEditForm.setValue({
-        patientUIN: this.patient.patientUIN,
-        hospital: this.patient.hospital,
-        firstName: this.patient.firstName,
-        lastName: this.patient.lastName,
-        middleName: this.patient.middle,
-        sex: this.patient.patientSex?.sexId,
-        dob: new Date(),
-        estdob: 'A',
-        clinician: this.patient?.doctor?.clinicianId,
-        treatmentLocation: this.patient.location?.treatmentLocationId,
-        institution: this.patient.institution,
-        hospitalUR: this.patient.hospitalUR,
-        postcode: this.patient.postCode,
-        medicareNo: this.patient.medicareNo,
-        studyCoordinator: this.patient.studyCoordinator,
-        coordinatorPhone: this.patient.studyCoordinatorPhone,
-        comments: this.patient.comments,
-      });
-
-      this.patientChanged.unsubscribe();
-    });
-
-    /*
-    this.route.paramMap.pipe(
-      switchMap(params => {
-        this.patientId = parseInt(params.get('id')!, 10);
-
-        if (this.patientId < 1) {
-          this.router.navigate(['list'], { relativeTo: this.route });
-        } else {
-          this.repo.getPatient(this.patientId);
-        }
-
-        return new Observable();
-      })
-    );
-    */
-
-    this.route.params.subscribe((params: Params) => {
-      this.patientId = +params['id'];
-      if (this.patientId < 1) {
-        this.router.navigate(['list'], { relativeTo: this.route });
-      } else {
-        this.repo.getPatient(this.patientId);
-      }
-    });
 
     this.patientEditForm = new FormGroup({
       patientUIN: new FormControl(null, Validators.required),
@@ -122,9 +56,45 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
       hospitalUR: new FormControl(null, Validators.required),
       postcode: new FormControl(null, Validators.required),
       medicareNo: new FormControl(null, Validators.required),
-      studyCoordinator: new FormControl(),
-      coordinatorPhone: new FormControl(),
-      comments: new FormControl(),
+      studyCoordinator: new FormControl(null),
+      studyCoordinatorPhone: new FormControl(null),
+      comments: new FormControl(null),
+    });
+
+    this.patientSub = this.route.data.subscribe((data: Data) => {
+      this.patient = data['patient'];
+
+      this.patientEditForm.setValue({
+        'patientUIN': this.patient.patientUIN,
+        'hospital': this.patient.hospital,
+        'firstName': this.patient.firstName,
+        'lastName': this.patient.lastName,
+        'middleName': this.patient.middle,
+        'sex': this.patient.patientSex?.sexId,
+        'dob': formatDate(this.patient.dob!, 'dd/MM/yyy', 'en-AU'),
+        'estdob': this.patient.estDOB || 'A',
+        'clinician': this.patient?.doctor?.clinicianId,
+        'treatmentLocation': this.patient.location?.treatmentLocationId,
+        'institution': this.patient.institution,
+        'hospitalUR': this.patient.hospitalUR,
+        'postcode': this.patient.postCode,
+        'medicareNo': this.patient.medicareNo,
+        'studyCoordinator': this.patient.studyCoordinator,
+        'studyCoordinatorPhone': this.patient.studyCoordinatorPhone,
+        'comments': this.patient.comments,
+      });
+    });
+
+    this.sexListSub = this.route.data.subscribe((data: Data) => {
+      this.sexes = data['sexes'];
+    });
+
+    this.cliniciansListSub = this.route.data.subscribe((data: Data) => {
+      this.clinicians = data['clinicians'];
+    });
+
+    this.locationsListSub = this.route.data.subscribe((data: Data) => {
+      this.treatmentLocations = data['treatmentlocations'];
     });
 
     this.errorsChanged = this.repo.errorsChanged.subscribe((e) => {
@@ -133,7 +103,6 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
   }
 
   changeEDOB(e: any) {
-    console.log(e.target.value);
     this.patientEditForm.get('estdob')?.setValue(e.target.value, {
       onlySelf: true,
     });
@@ -157,14 +126,58 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
     });
   }
 
-  updatePatient() {
-    this.patientChanged = this.repo.patientChanged.subscribe((p) => {
-      this.changesSaved = true;
-      this.patientEditForm.reset();
-      this.router.navigate(['..'], { relativeTo: this.route });
+  changeInstitution(e: any) {
+    this.patientEditForm.get('institution')?.setValue(e.target.value, {
+      onlySelf: true,
     });
+  }
 
-    this.repo.replacePatient(this.patient);
+  updatePatient() {
+
+    if (this.patientEditForm.valid)
+    {
+      this.patientChanged = this.repo.patientChanged.subscribe((p) => {
+        this.changesSaved = true;
+        this.patientEditForm.reset();
+        // this.router.navigate(['..'], { relativeTo: this.route });
+      });
+
+      const patient = new Patient(
+        this.patient.patientId,
+        this.patientEditForm.get('patientUIN')?.value,
+        this.patientEditForm.get('hospitalUR')?.value,
+        this.patientEditForm.get('hospital')?.value,
+        this.patientEditForm.get('firstName')?.value,
+        this.patientEditForm.get('lastName')?.value,
+        this.patientEditForm.get('middleName')?.value,
+        new Date(formatDate(this.patientEditForm.get('dob')!.value, 'dd/MM/yyyy', 'en-AU')), // formatDate(this.patientEditForm.get('dob')!.value, 'dd/MM/yyyy', 'en-AU')
+        this.patientEditForm.get('estdob')?.value,
+        this.sexes.find(
+          (s) => s.sexId === parseInt(this.patientEditForm.get('sex')?.value)
+        ),
+        this.patientEditForm.get('medicareNo')?.value,
+        this.patientEditForm.get('postcode')?.value,
+        this.treatmentLocations.find(
+          (tr) =>
+            tr.treatmentLocationId ===
+            parseInt(this.patientEditForm.get('treatmentLocation')?.value)
+        ),
+        this.clinicians.find(
+          (c) =>
+            c.clinicianId ===
+            parseInt(this.patientEditForm.get('clinician')?.value)
+        ),
+        this.patientEditForm.get('institution')?.value,
+        this.patientEditForm.get('studyCoordinator')?.value,
+        this.patientEditForm.get('studyCoordinatorPhone')?.value,
+        // this.patientEditForm.get('comments')?.value,
+      ); 
+
+      // BUG: Can't seem to save comments via constructor. For some reason, they get saved to the isActive property.
+        patient.comments = this.patientEditForm.get('comments')?.value;
+
+        this.repo.replacePatient(patient);
+    }
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -176,6 +189,7 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
   }
 
   ngOnDestroy() {
+    this.patientSub.unsubscribe();
     this.errorsChanged.unsubscribe();
     this.patientChanged.unsubscribe();
     this.sexListSub.unsubscribe();

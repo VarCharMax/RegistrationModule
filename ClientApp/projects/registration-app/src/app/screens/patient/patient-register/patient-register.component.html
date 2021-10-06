@@ -1,176 +1,214 @@
-<div class="row">
-    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-      <form [formGroup]="patientRegistrationForm" (ngSubmit)="savePatient()">
-        <div class="form-group">
-            <label for="patientUIN">Patient UIN</label>
-            <input
-              type="text"
-              id="patientUIN"
-              formControlName="patientUIN"
-              class="form-control">
-            <span
-              *ngIf="!patientRegistrationForm.get('patientUIN')?.valid && patientRegistrationForm.get('patientUIN')?.touched"
-              class="help-block">
-              This field is required.
-            </span>
-          </div>
-        <div class="form-group">
-            <label for="hospitalUR">Hospital UR</label>
-            <input
-                type="text"
-                id="hospitalUR"
-                formControlName="hospitalUR"
-                class="form-control">
-            <span
-                *ngIf="!patientRegistrationForm.get('hospitalUR')?.valid && patientRegistrationForm.get('hospitalUR')?.touched"
-                class="help-block">This field is required.
-            </span>
-        </div>
-        <div class="form-group">
-            <label for="hospital">Hospital</label>
-            <input
-                type="text"
-                id="hospital"
-                formControlName="hospital"
-                class="form-control">
-            <span
-                *ngIf="!patientRegistrationForm.get('hospital')?.valid && patientRegistrationForm.get('hospital')?.touched"
-                class="help-block">This field is required.
-            </span>
-        </div>
-        <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input
-            type="text"
-            id="firstName"
-            formControlName="firstName"
-            class="form-control">
-            <span
-                *ngIf="!patientRegistrationForm.get('firstName')?.valid && patientRegistrationForm.get('firstName')?.touched"
-                class="help-block">This field is required.
-            </span>
-        </div>
-        <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input
-                type="text"
-                id="lastName"
-                formControlName="lastName"
-                class="form-control">
-            <span
-                *ngIf="!patientRegistrationForm.get('lastName')?.valid && patientRegistrationForm.get('lastName')?.touched"
-                class="help-block">This field is required.
-            </span>
-        </div>
-        <div class="form-group">
-            <label for="middleName">Middle Name</label>
-            <input
-                type="text"
-                id="middleName"
-                formControlName="middleName"
-                class="form-control">
-        </div>
-        <div class="select" >
-            <label for="sex">Sex</label>
-            <select formControlName="sex" (change)="changeSex($event)">
-                <option value="0">Select Sex</option>
-                <option *ngFor="let sex of sexes" [ngValue]="sex.sexId">{{sex.description}}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="dob">Date of Birth</label>
-            <input
-                type="text"
-                id="dob"
-                formControlName="dob"
-                class="form-control">
-            <span
-                *ngIf="!patientRegistrationForm.get('dob')?.valid && patientRegistrationForm.get('dob')?.touched"
-                class="help-block">This field is required.
-            </span>
-        </div>
-        <div class="select" >
-            <label for="estdob">Estimated DOB</label>
-            <select formControlName="estdob" (change)="changeEDOB($event)">
-                <option value="0">Select Estimated DOB</option>
-                <option *ngFor="let edob of estimatedDOB" [ngValue]="edob">{{edob}}</option>
-            </select>
-        </div>
-        <div class="select" >
-            <label for="clinician">Doctor</label>
-            <select formControlName="clinician" (change)="changeClinician($event)">
-                <option value="0">Select Clinician</option>
-                <option *ngFor="let clinician of clinicians" [ngValue]="clinician.clinicianId">{{clinician.firstName}} {{clinician.lastName}}</option>
-            </select>
-        </div>
-        <div class="select" >
-            <label for="treatmentLocation">Treatment Location</label>
-            <select formControlName="treatmentLocation" (change)="changeTreatmentLocation($event)">
-                <option value="0" disabled>Select Treatment Location</option>
-                <option *ngFor="let location of treatmentLocations" [ngValue]="location.treatmentLocationId">{{location.location}}</option>
-            </select>
-        </div>
-        <div class="radio" *ngFor="let institution of institutions">
-            <label>
-              <input
-                type="radio"
-                formControlName="institution"
-                [value]="institution">{{ institution }}
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="postcode">Postcode</label>
-            <input
-                type="text"
-                id="postcode"
-                formControlName="postcode"
-                class="form-control">
-            <span
-                *ngIf="!patientRegistrationForm.get('postcode')?.valid && patientRegistrationForm.get('postcode')?.touched"
-                class="help-block">This field is required.
-            </span>
-        </div>
-        <div class="form-group">
-            <label for="medicareNo">Medicare No</label>
-            <input
-                type="text"
-                id="medicareNo"
-                formControlName="medicareNo"
-                class="form-control">
-            <span
-                *ngIf="!patientRegistrationForm.get('medicareNo')?.valid && patientRegistrationForm.get('medicareNo')?.touched"
-                class="help-block">This field is required.
-            </span>
-        </div>
-        <div class="form-group">
-            <label for="studyCoordinator">Study Coordinator</label>
-            <input
-                type="text"
-                id="studyCoordinator"
-                formControlName="studyCoordinator"
-                class="form-control">
+<div id="div_patientDetails_content" >
+    <div class="page-header" id="demographicsAndSummaryPageHeader"  style="margin-top: 30px;">
+        <h1><small>Patient Details</small></h1>
+    </div>
+    <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
+        <form [formGroup]="patientRegistrationForm" (ngSubmit)="savePatient()">
+            <div class="panel-body" >
+                <table class="table-hover table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>UIN</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="patientUIN"
+                                formControlName="patientUIN"
+                                class="form-control">
+                                <span
+                                    *ngIf="!patientRegistrationForm.get('patientUIN')?.valid && patientRegistrationForm.get('patientUIN')?.touched"
+                                    class="help-block">This field is required.
+                                </span>
+                            </td>
+                            <td>Medicare Number</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="medicareNo"
+                                formControlName="medicareNo"
+                                class="form-control">
+                                <span
+                                    *ngIf="!patientRegistrationForm.get('medicareNo')?.valid && patientRegistrationForm.get('medicareNo')?.touched"
+                                    class="help-block">This field is required.
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>First Name</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="firstName"
+                                formControlName="firstName"
+                                class="form-control">
+                                <span
+                                    *ngIf="!patientRegistrationForm.get('firstName')?.valid && patientRegistrationForm.get('firstName')?.touched"
+                                    class="help-block">This field is required.
+                                </span>
+                            </td>
+                            <td>Last Name</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="lastName"
+                                formControlName="lastName"
+                                class="form-control">
+                            <span
+                                *ngIf="!patientRegistrationForm.get('lastName')?.valid && patientRegistrationForm.get('lastName')?.touched"
+                                class="help-block">This field is required.
+                            </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Middle Name</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="middleName"
+                                formControlName="middleName"
+                                class="form-control"></td>
+                            <td><label for="sex">Sex</label></td>
+                            <td>
+                                <select formControlName="sex" (change)="changeSex($event)">
+                                    <option value="0">Select ...</option>
+                                    <option *ngFor="let sex of sexes" value="{{sex.sexId}}">{{sex.description}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Date of birth<td>
+                                <input
+                                type="text"
+                                id="dob"
+                                formControlName="dob"
+                                class="form-control">
+                            <span
+                                *ngIf="!patientRegistrationForm.get('dob')?.valid && patientRegistrationForm.get('dob')?.touched"
+                                class="help-block">This field is required.
+                            </span>
+                            </td>
+                            <td>
+                               Est DOB
+                            </td>
+                            <td>
+                                <select formControlName="estdob" (change)="changeEDOB($event)">
+                                    <option value="0">Select ...</option>
+                                    <option *ngFor="let edob of estimatedDOB" value="{{edob}}">{{edob}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Postcode</td>
+                            <td><input
+                                type="text"
+                                id="postcode"
+                                formControlName="postcode"
+                                class="form-control">
+                                <span
+                                *ngIf="!patientRegistrationForm.get('postcode')?.valid && patientRegistrationForm.get('postcode')?.touched"
+                                class="help-block">This field is required.
+                            </span></td>
+                            <td>Hospital UR</td>
+                            <td><input
+                                type="text"
+                                id="hospitalUR"
+                                formControlName="hospitalUR"
+                                class="form-control">
+                                <span
+                                *ngIf="!patientRegistrationForm.get('hospitalUR')?.valid && patientRegistrationForm.get('hospitalUR')?.touched"
+                                class="help-block">This field is required.
+                            </span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        <div class="form-group">
-            <label for="coordinatorPhone">Study Coordinator Phone</label>
-            <input
-                type="text"
-                id="coordinatorPhone"
-                formControlName="coordinatorPhone"
-                class="form-control">
+        <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
+            <div class="panel-heading" >Treatment Location</div>
+            <div class="panel-body" >
+                <table class="table-hover table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>Treatment Location</td>
+                            <td>
+                                <select formControlName="treatmentLocation" (change)="changeTreatmentLocation($event)">
+                                    <option value="0">Select ... </option>
+                                    <option *ngFor="let location of treatmentLocations" value="{{location.treatmentLocationId}}">{{location.location}}</option>
+                                </select>
+                            </td>
+                            <td>Hospital</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="hospital"
+                                formControlName="hospital"
+                                class="form-control">
+                            <span
+                                *ngIf="!patientRegistrationForm.get('hospital')?.valid && patientRegistrationForm.get('hospital')?.touched"
+                                class="help-block">This field is required.
+                            </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Consenting Clinician</td>
+                            <td>
+                                <select formControlName="clinician" (change)="changeClinician($event)">
+                                    <option value="0">Select ...</option>
+                                    <option *ngFor="let clinician of clinicians" value="{{ clinician.clinicianId }}">{{clinician.firstName}} {{clinician.lastName}}</option>
+                                </select>
+                            </td>
+                            <td>Institution Type</td>
+                            <td>
+                                <div class="radio" *ngFor="let institution of institutions">
+                                    <label>
+                                      <input
+                                        type="radio"
+                                        formControlName="institution"
+                                        [value]="institution">{{ institution }}
+                                    </label>
+                                  </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Name of Study Co-ordinator</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="studyCoordinator"
+                                formControlName="studyCoordinator"
+                                class="form-control">
+                            </td>
+                            <td>Study co-ordinator phone</td>
+                            <td>
+                                <input
+                                type="text"
+                                id="studyCoordinatorPhone"
+                                formControlName="studyCoordinatorPhone"
+                                class="form-control">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="comments">Comments</label>
-            <input
-                type="text"
-                id="comments"
-                formControlName="comments"
-                class="form-control">
+        <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
+            <div class="panel-heading" >Comments</div>
+            <div class="panel-body" >
+                <table class="table-hover table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input
+                                type="text"
+                                id="comments"
+                                formControlName="comments"
+                                class="form-control">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div
-            *ngIf="!patientRegistrationForm.valid && patientRegistrationForm.touched"
-            class="help-block">Please enter valid data
-        </div>
-        <button class="btn btn-primary" type="submit" [disabled]="!patientRegistrationForm.valid">Submit</button>
-      </form>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
     </div>
 </div>

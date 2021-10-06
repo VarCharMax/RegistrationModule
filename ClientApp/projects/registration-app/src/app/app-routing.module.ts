@@ -11,6 +11,7 @@ import { PatientDisplayComponent } from './screens/patient/patient-display/patie
 import { PatientEditComponent } from './screens/patient/patient-edit/patient-edit.component';
 import { PatientListComponent } from './screens/patient/patient-list/patient-list.component';
 import { PatientRegisterComponent } from './screens/patient/patient-register/patient-register.component';
+import { PatientResolver } from 'projects/resolvers/patient-resolver.service';
 import { PatientsResolver } from 'projects/resolvers/patients-resolver.service';
 import { ProjectsResolver } from 'projects/resolvers/projects-resolver.service';
 import { SearchComponent } from './screens/search/search/search.component';
@@ -22,15 +23,7 @@ import { TreatmentLocationsResolver } from 'projects/resolvers/treatmentlocation
 // import { AuthGuard } from './auth-guard.service';
 
 const appRoutes: Routes = [
-  { 
-    path: '', component: HomeComponent, resolve: { 
-        clinicians: CliniciansResolver,
-        sexes: SexesResolver,
-        treatmentlocations: TreatmentLocationsResolver,
-        patients: PatientsResolver
-    }
-}
-,
+  { path: '',   redirectTo: '/search', pathMatch: 'full' },
   {
     path: 'search',
     component: SearchComponent,
@@ -58,7 +51,7 @@ const appRoutes: Routes = [
           treatmentlocations: TreatmentLocationsResolver,
         },
       },
-      { path: ':id', component: PatientDisplayComponent },
+      /* { path: ':id', component: PatientDisplayComponent }, */
       {
         path: ':id/edit',
         component: PatientEditComponent,
@@ -68,6 +61,7 @@ const appRoutes: Routes = [
           sexes: SexesResolver,
           projects: ProjectsResolver,
           treatmentlocations: TreatmentLocationsResolver,
+          patient: PatientResolver
         },
       },
     ],

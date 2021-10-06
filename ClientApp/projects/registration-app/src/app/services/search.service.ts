@@ -7,7 +7,6 @@ export class SearchService {
     constructor() {
         this.hasSearched.subscribe(s => {
             this.isActivated = s;
-            console.log('Patient tab activated!');
         });
     }
 

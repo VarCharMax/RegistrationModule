@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BaseUrlInterceptor } from 'projects/interceptors/baseurlinterceptor';
 import { BrowserModule } from '@angular/platform-browser';
+import { CanActivatePatientsGuard } from './services/can-activate-guard.service';
 import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
 import { CliniciansResolver } from 'projects/resolvers/clinicians-resolver.service';
 import { ErrorPageComponent } from 'projects/error-page/error-page.component';
@@ -20,17 +21,17 @@ import { PatientEditComponent } from './screens/patient/patient-edit/patient-edi
 import { PatientListComponent } from './screens/patient/patient-list/patient-list.component';
 import { PatientListElementComponent } from './page-elements/patient-list-element/patient-list-element.component';
 import { PatientRegisterComponent } from './screens/patient/patient-register/patient-register.component';
+import { PatientResolver } from 'projects/resolvers/patient-resolver.service';
 import { PatientSearchElementComponent } from './page-elements/search/patient-list-element/patient-search-element.component';
 import { PatientsResolver } from 'projects/resolvers/patients-resolver.service';
 import { ProjectsResolver } from 'projects/resolvers/projects-resolver.service';
 import { SearchComponent } from './screens/search/search/search.component';
 import { SearchInterfaceComponent } from './screens/search/search-interface/search-interface.component';
 import { SearchResultsComponent } from './screens/search/search-results/search-results.component';
+import { SearchService } from './services/search.service';
 import { SexesResolver } from 'projects/resolvers/sexes-resolver.service';
 import { TreatmentLocationsResolver } from 'projects/resolvers/treatmentlocations-resolver.service';
 import { environment } from 'projects/registration-app/src/environments/environment';
-import { SearchService } from './services/search.service';
-import { CanActivatePatientsGuard } from './services/can-activate-guard.service';
 
 //import { HelpComponent } from './screens/help/help.component';
 
@@ -68,6 +69,7 @@ import { CanActivatePatientsGuard } from './services/can-activate-guard.service'
       TreatmentLocationsResolver,
       PatientsResolver,
       SexesResolver,
+      PatientResolver,
       SearchService,
       { provide: "BASE_API_URL", useValue: environment.apiUrl },
       {

@@ -1,7 +1,7 @@
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 
-import { NgForm } from '@angular/forms';
 import { Project } from 'projects/models/project.model';
 import { Repository } from 'projects/modules/repository';
 import { SearchService } from '../../../services/search.service';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./search-interface.component.css']
 })
 export class SearchInterfaceComponent implements OnInit, OnDestroy {                
-  @ViewChild('f') searchForm: any;
+  patientSearchForm: FormGroup = new FormGroup({});
   private projectListSub: Subscription = new Subscription();
   private patientsListSub: Subscription = new Subscription();
   private projectId = '0';
@@ -28,12 +28,22 @@ export class SearchInterfaceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.searchForm.setValue({
-      'firstname': null,
-      'lastname': null,
-      'patientuin': null,
-      'hospitalur': null,
-      'projectid': 0
+    this.patientSearchForm = new FormGroup({
+      patientUIN: new FormControl(null),
+      hospitalUR: new FormControl(null),
+      firstName: new FormControl(null),
+      lastName: new FormControl(null),
+      dob: new FormControl(null),
+      project: new FormControl(0)
+    });
+
+    this.patientSearchForm.setValue({
+      'firstName': null,
+      'lastName': null,
+      'patientUIN': null,
+      'hospitalUR': null,
+      'dob': null, 
+      'project': 0
     });
 
     this.projectListSub = this.route.data.subscribe((data: Data) => {
@@ -41,7 +51,6 @@ export class SearchInterfaceComponent implements OnInit, OnDestroy {
     });
 
     this.patientsListSub = this.repo.patientsChanged.subscribe(p => {
-      console.log('Results:' + p.length);
       this.searchService.hasSearched.next(true);
       this.hasDoneSearch = true;
       this.repo.filter.reset();
@@ -50,7 +59,7 @@ export class SearchInterfaceComponent implements OnInit, OnDestroy {
   }
 
   resetValue() {
-    this.searchForm.reset();
+    this.patientSearchForm.reset();
   }
 
   showSearchResults() {
@@ -58,10 +67,10 @@ export class SearchInterfaceComponent implements OnInit, OnDestroy {
 
         let searchString = '';
 
-        const fn = this.searchForm.value.firstName;
-        const ln = this.searchForm.value.lastName;
-        const patientUIN = this.searchForm.value.patientUIN;
-        const hospitalUR = this.searchForm.value.hospitalUR;
+        const fn = this.patientSearchForm.get('firstName')?.value;
+        const ln = this.patientSearchForm.get('lastName')?.value;
+        const patientUIN = this.patientSearchForm.get('patientUIN')?.value;
+        const hospitalUR = this.patientSearchForm.get('hospitalUR')?.value;
 
         if (fn)
         {
@@ -83,7 +92,7 @@ export class SearchInterfaceComponent implements OnInit, OnDestroy {
           searchString += 'hospitalur=' + encodeURIComponent(hospitalUR) + '&';
         }
 
-        if (this.projectId != '0')
+        if (this.projectId && this.projectId != '0')
         {
           searchString += 'projectid=' + encodeURIComponent(this.projectId) + '&';
         }
@@ -93,7 +102,7 @@ export class SearchInterfaceComponent implements OnInit, OnDestroy {
         this.repo.filter.related = true;
         this.repo.filter.search = searchString;
 
-        console.log(searchString);
+        // console.log(searchString);
         
         this.repo.getPatients();
   }
