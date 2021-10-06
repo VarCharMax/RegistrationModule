@@ -1,4 +1,13 @@
-﻿
+﻿@section href {
+    <environment include="Development">
+        <base href="/">
+    </environment>
+    <environment exclude="Development">
+        <base href="/RegistrationModule/Admin">
+    </environment>
+}
+
+
 @section scripts {
     <environment include="Development">
         <script src="runtime.js"></script>

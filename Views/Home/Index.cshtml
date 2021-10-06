@@ -1,4 +1,12 @@
-﻿
+﻿@section href {
+    <environment include="Development">
+        <base href="/">
+    </environment>
+    <environment exclude="Development">
+        <base href="/RegistrationModule">
+    </environment>
+}
+
 @section scripts {
     <environment include="Development">
         <script src="runtime.js"></script>
@@ -12,6 +20,6 @@
         <script src="~/js/main/polyfills.js" type="module"></script>
         <script src="~/js/main/main.js" type="module"></script>
     </environment>
- }
+}
 
 <app-root>Loading...</app-root>
