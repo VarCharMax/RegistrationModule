@@ -1,4 +1,5 @@
 import { Clinician } from 'projects/models/clinician.model';
+import { Content } from 'projects/models/content.model';
 import { Filter } from './configClasses.repository';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -15,6 +16,7 @@ const sexesUrl = 'api/sexes';
 const rolesUrl = 'api/roles';
 const treatmentLocationsUrl = 'api/treatmentlocations';
 const projectsUrl = 'api/projects';
+const contentsUrl = 'api/content';
 
 @Injectable()
 export class Repository {
@@ -23,6 +25,7 @@ export class Repository {
   private treatmentLocations: TreatmentLocation[] = [];
   private roles: Role[] = [];
   private sexes: Sex[] = [];
+  private contents: Content[] = [];
 
   patientsChanged: Subject<Patient[]> = new Subject<Patient[]>();
   patientChanged: Subject<Patient> = new Subject<Patient>();
@@ -30,6 +33,8 @@ export class Repository {
   clinicianChanged: Subject<Clinician> = new Subject<Clinician>();
   sexesChanged: Subject<Sex[]> = new Subject<Sex[]>();
   sexChanged: Subject<Sex> = new Subject<Sex>();
+  contentsChanged: Subject<Content[]> = new Subject<Content[]>();
+  contentChanged: Subject<Content> = new Subject<Content>();
   projectsChanged: Subject<Project[]> = new Subject<Project[]>();
   projectChanged: Subject<Project> = new Subject<Project>();
   treatmentLocationsChanged: Subject<TreatmentLocation[]> = new Subject<
@@ -100,6 +105,13 @@ export class Repository {
     });
   }
 
+  getContents() {
+    this.http.get<Content[]>(contentsUrl).subscribe((c) => {
+      this.contents = c.slice();
+      this.contentsChanged.next(c.slice());
+    });
+  }
+
   /*
    * Get entity
    */
@@ -130,6 +142,12 @@ export class Repository {
   getProject(id: number) {
     this.http.get<Project>(`${projectsUrl}/${id}`).subscribe((p) => {
       this.projectChanged.next(JSON.parse(JSON.stringify(p)));
+    });
+  }
+
+  getContent(id: number) {
+    this.http.get<Content>(`${contentsUrl}/${id}`).subscribe((c) => {
+      this.contentChanged.next(JSON.parse(JSON.stringify(c)));
     });
   }
 
@@ -170,6 +188,26 @@ export class Repository {
         project.projectId = id;
         this.projects.push(JSON.parse(JSON.stringify(project)));
         this.projectsChanged.next(this.projects.slice());
+      },
+      (e) => {
+        console.log('Error! ' + e);
+        this.errorsChanged.next(e.error?.errors);
+      }
+    );
+  }
+
+  createContent(content: Content) {
+    let data = {
+      title: content.title,
+      content: content.content,
+      isVisible: content.isVisible,
+    };
+
+    this.http.post<number>(contentsUrl, data).subscribe(
+      (id) => {
+        content.contentId = id;
+        this.contents.push(JSON.parse(JSON.stringify(content)));
+        this.contentsChanged.next(this.contents.slice());
       },
       (e) => {
         console.log('Error! ' + e);
@@ -306,6 +344,18 @@ export class Repository {
       .subscribe(() => this.getClinicians());
   }
 
+  replaceContent(content: Content) {
+    let data = {
+      title: content.title,
+      content: content.content,
+      isVisible: content.isVisible,
+    };
+
+    this.http
+      .put(`${contentsUrl}/${content.contentId}`, data)
+      .subscribe(() => this.getContents());
+  }
+
   replaceTreatmentLocation(treatmentLocation: TreatmentLocation) {
     let data = {
       location: treatmentLocation.location,
@@ -333,6 +383,15 @@ export class Repository {
   /*
    * Update entity
    */
+
+  updateContent(id: number, changes: Map<string, any>) {
+    let patch: { op: string; path: string; value: any }[] = [];
+    changes.forEach((value, key) =>
+      patch.push({ op: 'replace', path: key, value: value })
+    );
+    this.http.patch(`${contentsUrl}/${id}`, patch).subscribe(() => this.getContent(id));
+  }
+
   updatePatient(id: number, changes: Map<string, any>) {
     let patch: { op: string; path: string; value: any }[] = [];
     changes.forEach((value, key) =>

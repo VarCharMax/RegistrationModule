@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { ClinicianCreateComponent } from './screens/clinician-management/clinician-create/clinician-create.component';
 import { ClinicianDetailsComponent } from './screens/clinician-management/clinician-details/clinician-details.component';
 import { ClinicianDisplayComponent } from './screens/clinician-management/clinician-display/clinician-display.component';
 import { ClinicianEditComponent } from './screens/clinician-management/clinician-edit/clinician-edit.component';
@@ -11,14 +12,23 @@ import { ClinicianManagementComponent } from './screens/clinician-management/cli
 import { ClinicianResolver } from 'projects/resolvers/clinician-resolver.service';
 import { CliniciansListComponent } from './screens/clinician-management/clinicians-list/clinicians-list.component';
 import { CliniciansResolver } from 'projects/resolvers/clinicians-resolver.service';
+import { ContentCreateComponent } from './screens/content-management/content-create/content-create.component';
+import { ContentDisplayComponent } from './screens/content-management/content-display/content-display.component';
+import { ContentEditComponent } from './screens/content-management/content-edit/content-edit.component';
+import { ContentListComponent } from './screens/content-management/content-list/content-list.component';
 import { ContentManagementComponent } from './screens/content-management/content-management.component';
+import { ContentResolver } from 'projects/resolvers/content-resolver.service';
+import { ContentsResolver } from 'projects/resolvers/contents-resolver.service';
 import { FooterComponent } from './page-elements/footer/footer.component';
 import { HeaderComponent } from './page-elements/header/header.component';
+import { HomeComponent } from './screens/home/home.component';
+import { LocationCreateComponent } from './screens/treatment-location-management/location-create/location-create.component';
 import { LocationDisplayComponent } from './screens/treatment-location-management/location-display/location-display.component';
 import { LocationEditComponent } from './screens/treatment-location-management/location-edit/location-edit.component';
 import { LocationsListComponent } from './screens/treatment-location-management/locations-list/locations-list.component';
 import { ModelModule } from 'projects/modules/model.module';
 import { NgModule } from '@angular/core';
+import { ProjectCreateComponent } from './screens/project-management/project-create/project-create.component';
 import { ProjectDisplayComponent } from './screens/project-management/project-display/project-display.component';
 import { ProjectEditComponent } from './screens/project-management/project-edit/project-edit.component';
 import { ProjectManagementComponent } from './screens/project-management/project-management.component';
@@ -32,14 +42,6 @@ import { UserDetailsComponent } from './screens/user-management/user-details/use
 import { UserHospitalsComponent } from './screens/user-management/user-hospitals/user-hospitals.component';
 import { UserManagementComponent } from './screens/user-management/user-management.component';
 import { UserRoleComponent } from './screens/user-management/user-role/user-role.component';
-import { HomeComponent } from './screens/home/home.component';
-import { ProjectCreateComponent } from './screens/project-management/project-create/project-create.component';
-import { ClinicianCreateComponent } from './screens/clinician-management/clinician-create/clinician-create.component';
-import { ContentListComponent } from './screens/content-management/content-list/content-list.component';
-import { ContentDisplayComponent } from './screens/content-management/content-display/content-display.component';
-import { ContentEditComponent } from './screens/content-management/content-edit/content-edit.component';
-import { ContentCreateComponent } from './screens/content-management/content-create/content-create.component';
-import { LocationCreateComponent } from './screens/treatment-location-management/location-create/location-create.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +91,8 @@ import { LocationCreateComponent } from './screens/treatment-location-management
     ProjectsResolver,
     TreatmentLocationResolver,
     TreatmentLocationsResolver,
+    ContentsResolver,
+    ContentResolver,
   ],
   bootstrap: [AppComponent],
 })

@@ -1,23 +1,8 @@
-<div class="row">
-    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-        <ul class="nav nav-tabs">
-            <li class="nav-item" role="presentation"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link" routerLink="/">Home</a>
-            </li>
-            <li class="nav-item" role="presentation"
-                routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['projects']">Projects</a>
-            </li>
-            <li class="nav-item" role="presentation"
-                routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['clinicians']">Clinicians</a>
-            </li>
-            <li class="nav-item" role="presentation"
-                routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['locations']">Treatment Location</a>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-3">
+    <ul class="main-content-menu nav nav-pills nav-stacked" role="tablist">
+        <li><a data-toggle="pill" [routerLink]="['clinicians']" class="list-group-item">Clinician Management</a></li>
+        <li><a data-toggle="pill" [routerLink]="['locations']" class="list-group-item">Location Management</a></li>
+        <li><a data-toggle="pill" [routerLink]="['content']"  class="list-group-item">Content Management</a></li>
+        <li><a data-toggle="pill" [routerLink]="['projects']" class="list-group-item" ng-click="getProjects()">Projects</a></li>
+    </ul>
 </div>

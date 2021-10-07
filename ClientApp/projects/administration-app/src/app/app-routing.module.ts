@@ -7,8 +7,14 @@ import { ClinicianManagementComponent } from './screens/clinician-management/cli
 import { ClinicianResolver } from 'projects/resolvers/clinician-resolver.service';
 import { CliniciansListComponent } from './screens/clinician-management/clinicians-list/clinicians-list.component';
 import { CliniciansResolver } from 'projects/resolvers/clinicians-resolver.service';
+import { ContentCreateComponent } from './screens/content-management/content-create/content-create.component';
+import { ContentDisplayComponent } from './screens/content-management/content-display/content-display.component';
+import { ContentEditComponent } from './screens/content-management/content-edit/content-edit.component';
+import { ContentListComponent } from './screens/content-management/content-list/content-list.component';
+import { ContentManagementComponent } from './screens/content-management/content-management.component';
+import { ContentResolver } from 'projects/resolvers/content-resolver.service';
+import { ContentsResolver } from 'projects/resolvers/contents-resolver.service';
 import { ErrorPageComponent } from 'projects/error-page/error-page.component';
-import { HomeComponent } from './screens/home/home.component';
 import { LocationCreateComponent } from './screens/treatment-location-management/location-create/location-create.component';
 import { LocationDisplayComponent } from './screens/treatment-location-management/location-display/location-display.component';
 import { LocationEditComponent } from './screens/treatment-location-management/location-edit/location-edit.component';
@@ -28,32 +34,8 @@ import { TreatmentLocationsResolver } from 'projects/resolvers/treatmentlocation
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-  },
-  {
-    path: 'projects',
-    component: ProjectManagementComponent,
-    children: [
-      {
-        path: '',
-        component: ProjectsListComponent,
-        resolve: { projects: ProjectsResolver },
-      },
-      {
-        path: 'new',
-        component: ProjectCreateComponent,
-      },
-      {
-        path: ':id',
-        component: ProjectDisplayComponent,
-        resolve: { project: ProjectResolver },
-      },
-      {
-        path: ':id/edit',
-        component: ProjectEditComponent,
-        resolve: { project: ProjectResolver },
-      },
-    ],
+    redirectTo: '/clinicians',
+    pathMatch: 'full',
   },
   {
     path: 'clinicians',
@@ -112,6 +94,56 @@ const routes: Routes = [
         path: ':id/edit',
         component: LocationEditComponent,
         resolve: { location: TreatmentLocationResolver },
+      },
+    ],
+  },
+  {
+    path: 'projects',
+    component: ProjectManagementComponent,
+    children: [
+      {
+        path: '',
+        component: ProjectsListComponent,
+        resolve: { projects: ProjectsResolver },
+      },
+      {
+        path: 'new',
+        component: ProjectCreateComponent,
+      },
+      {
+        path: ':id',
+        component: ProjectDisplayComponent,
+        resolve: { project: ProjectResolver },
+      },
+      {
+        path: ':id/edit',
+        component: ProjectEditComponent,
+        resolve: { project: ProjectResolver },
+      },
+    ],
+  },
+  {
+    path: 'content',
+    component: ContentManagementComponent,
+    children: [
+      {
+        path: '',
+        component: ContentListComponent,
+        resolve: { contents: ContentsResolver },
+      },
+      {
+        path: 'new',
+        component: ContentCreateComponent,
+      },
+      {
+        path: ':id',
+        component: ContentDisplayComponent,
+        resolve: { content: ContentResolver },
+      },
+      {
+        path: ':id/edit',
+        component: ContentEditComponent,
+        resolve: { content: ContentResolver },
       },
     ],
   },
