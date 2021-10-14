@@ -2,9 +2,7 @@
   {
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
-      "wwwroot/css/site.css",
-      "wwwroot/css/chosen/prism.css",
-      "wwwroot/css/chosen/chosen.css"
+      "wwwroot/css/site.css"
     ]
   },
   {

@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BaseUrlInterceptor } from 'projects/interceptors/baseurlinterceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CanActivatePatientsGuard } from './services/can-activate-guard.service';
 import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
@@ -12,6 +13,8 @@ import { FooterComponent } from './page-elements/footer/footer.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderComponent } from './page-elements/header/header.component';
 import { HomeComponent } from './screens/home/home.component';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MaterialModule } from 'projects/modules/material-module';
 import { ModelModule } from 'projects/modules/model.module';
 import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from '../../../page-not-found/page-not-found.component';
@@ -34,6 +37,18 @@ import { TreatmentLocationsResolver } from 'projects/resolvers/treatmentlocation
 import { environment } from 'projects/registration-app/src/environments/environment';
 
 //import { HelpComponent } from './screens/help/help.component';
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  },
+};
 
 @NgModule({
   declarations: [
@@ -59,9 +74,12 @@ import { environment } from 'projects/registration-app/src/environments/environm
     AppRoutingModule,
     ModelModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MaterialModule
   ],
     providers: [
+      { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
       CanDeactivateGuard,
       CanActivatePatientsGuard,
       CliniciansResolver,

@@ -4,43 +4,80 @@
         <h3>Search Patient</h3>
     </div>
     <div class="search-panel panel panel-default col-sm-3" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
-        <form name="SearchForm" role="form" class="form-horizontal" [formGroup]="patientSearchForm" (ngSubmit)="showSearchResults()" #f="ngForm">
+        <form name="SearchForm" role="form" class="form-horizontal" [formGroup]="patientSearchForm" (ngSubmit)="showSearchResults()">
             <div class="input-group" >
-                <div class="input-group-addon" >Surname</div>
-                <input formControlName="lastName" class="form-control" id="lastname">
-            </div>
-            <div class="input-group" >
-                <div class="input-group-addon"  >First Name</div>
-                <input formControlName="firstName" class="form-control" id="firstName">
-            </div>
-            <div class="input-group" >
-                <div class="input-group-addon" >Patient UIN</div>
-                <input formControlName="patientUIN" class="form-control" id="uiNum">
-            </div>
-            <div class="input-group" >
-                <div class="input-group-addon" >Hospital UR</div>
-                <input formControlName="hospitalUR" class="form-control" id="urNum">
-            </div>
-            <div class="input-group" >
-                <div class="input-group-addon" >Date of Birth</div>
-                <input formControlName="dob" id="tbDob" class="form-control">
-            </div>
-            <div class="input-group" >
-                <div class="input-group-addon" style="width:110px !important;" >Projects</div>
-                    <select class="form-control" id="project" formControlName="project" style="width: 100px;" (ngModelChange)="onProjectChanged($event)">
-                        <option [ngValue]="0">Please select ...</option>
-                        <option *ngFor="let project of projects" [ngValue]="project.projectId">{{project.name}}</option>
-                    </select>
-                </div>
-            <div class="input-group"  >
-                <button type="reset" class="btn btn-danger" (click)="resetValue()">Clear</button>
-                &nbsp;&nbsp;
-                <button class="btn btn-primary" style="width:100px;" type="submit">Search</button>
-            </div>
-            <div *ngIf="!hasDoneSearch" class="alert alert-warning" id="search-warning-text" style="text-align: center; margin-bottom:0;padding:5px;" >
-                <i class="glyphicon glyphicon-warning-sign"></i> <span></span>
-            </div>
-        </form>
+              <div class="input-group-addon" >Surname</div>
+              <mat-form-field class="example-full-width" appearance="fill">
+                <input matInput placeholder="Surname">
+              </mat-form-field>
+          </div>
+          <div class="input-group" >
+              <div class="input-group-addon"  >First Name</div>
+              <mat-form-field class="example-full-width" appearance="fill">
+                <input matInput placeholder="First name" value="">
+              </mat-form-field>
+          </div>
+          <div class="input-group" >
+              <div class="input-group-addon" >Patient UIN</div>
+              <mat-form-field class="example-full-width" appearance="fill">
+                <input matInput placeholder="Patient UIN" value="">
+              </mat-form-field>
+          </div>
+          <div class="input-group" >
+              <div class="input-group-addon" >Hospital UR</div>
+              <mat-form-field class="example-full-width" appearance="fill">
+                <input matInput placeholder="Hospital UR" value="">
+              </mat-form-field>
+          </div>
+          <div class="input-group" >
+            <div class="input-group-addon" >DOB</div>
+            <mat-form-field>
+              <input matInput formControlName="dob" [matDatepicker]="dob" placeholder="Choose a date">
+              <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+              <mat-datepicker #dob ></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <div class="input-group-addon" >Projects</div>
+            <mat-form-field class="example-chip-list" appearance="fill">
+              <mat-label>Selected projects</mat-label>
+              <mat-chip-list #chipList aria-label="Projects">
+                <mat-chip
+                  *ngFor="let project of selectedProjects"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  [value]="project.projectId"
+                  (removed)="remove(project)">
+                  {{project.name}}
+                  <button matChipRemove *ngIf="removable">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+                <input
+                  placeholder="Add Project..."
+                  #projectInput
+                  [formControl]="projectCtrl"
+                  [matAutocomplete]="auto"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  (matChipInputTokenEnd)="add($event)">
+              </mat-chip-list>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                <mat-option *ngFor="let project of filteredProjects | async" [value]="project.projectId">
+                  {{project.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="input-group"  >
+            <button type="reset" class="btn btn-danger" (click)="resetValue()">Clear</button>
+            &nbsp;&nbsp;
+            <button class="btn btn-primary" style="width:100px;" type="submit">Search</button>
+        </div>
+        <div *ngIf="!hasDoneSearch" class="alert alert-warning" id="search-warning-text" style="text-align: center; margin-bottom:0;padding:5px;" >
+            <i class="glyphicon glyphicon-warning-sign"></i> <span></span>
+        </div>
+          </form>
         <div>
             <button [disabled]="!hasDoneSearch" class="btn btn-success" style="width:100%;margin-top:10px;" id="btnNewPatient" (click)="createNewPatient()"><span class="glyphicon glyphicon-plus"> </span> New Patient</button>
         </div>

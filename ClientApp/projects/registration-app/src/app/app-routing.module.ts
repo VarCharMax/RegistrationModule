@@ -51,7 +51,6 @@ const appRoutes: Routes = [
           treatmentlocations: TreatmentLocationsResolver,
         },
       },
-      /* { path: ':id', component: PatientDisplayComponent }, */
       {
         path: ':id/edit',
         component: PatientEditComponent,

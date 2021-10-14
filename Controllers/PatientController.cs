@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using LinqKit;
 using System;
 using System.Web;
+using System.Globalization;
 
 namespace RegistrationModule.Controllers
 {
@@ -210,7 +211,8 @@ namespace RegistrationModule.Controllers
             switch (key)
             {
                 case "projectid":
-                    predicate.And(p => p.Project.ProjectId == Convert.ToInt64(value));
+                    List<long> ids = value.Split(',').AsEnumerable().Select(s => Convert.ToInt64(s)).ToList();
+                    predicate.And(p => ids.Any(id => id == p.Project.ProjectId));
                     break;
                 case "firstname":
                     predicate.And(p => p.FirstName.ToLower() == value.ToLower());
@@ -223,6 +225,12 @@ namespace RegistrationModule.Controllers
                     break;
                 case "hospitalur":
                     predicate.And(p => p.HospitalUR.ToLower() == value.ToLower());
+                    break;
+                case "dob":
+                    CultureInfo enAU = new CultureInfo("en-AU");
+                    DateTime dateValue;
+                    DateTime.TryParseExact(value, "g", enAU, DateTimeStyles.None, out dateValue);
+                    predicate.And(p => p.DOB == dateValue);
                     break;
             }
         }

@@ -10,7 +10,6 @@ import { Project } from 'projects/models/project.model';
 import { Repository } from 'projects/modules/repository';
 import { Sex } from 'projects/models/sex.model';
 import { TreatmentLocation } from 'projects/models/treatmentlocation.model';
-import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-patient-register',
@@ -26,10 +25,9 @@ export class PatientRegisterComponent
   private locationsListSub: Subscription = new Subscription();
   private patientsChanged: Subscription = new Subscription();
   private errorsChanged: Subscription = new Subscription();
-  private patientSexId: number = 0;
-  private treatmentLocationId: number = 0;
-  errors: { [label: string]: Array<string> } = {};
+  errors: string[] = [];
   patientRegistrationForm: FormGroup = new FormGroup({});
+  estimated: FormControl = new FormControl();
   changesSaved = false;
   sexes: Sex[] = [];
   clinicians: Clinician[] = [];
@@ -37,7 +35,14 @@ export class PatientRegisterComponent
   treatmentLocations: TreatmentLocation[] = [];
   institutions = ['Public', 'Private'];
   estimatedDOB = ['A', 'D', 'DM', 'DMY', 'DY', 'MY', 'Y'];
-  consents = [true, false];
+  selectedClinicianId: number = 0;
+  selectedSexId: number = 0;
+  selectedLocationId: number = 0;
+  selectedProjectId: number = 0;
+  selectedInstitution: string = 'Public';
+  hasConsented: boolean = false;
+  hasEstimatedDOB: boolean = false;
+  eDob: string ='';
 
   constructor(
     private repo: Repository,
@@ -53,7 +58,7 @@ export class PatientRegisterComponent
       lastName: new FormControl(null, Validators.required),
       middleName: new FormControl(null),
       sex: new FormControl(0),
-      dob: new FormControl(null),
+      dob: new FormControl(null, Validators.required),
       estdob: new FormControl(null),
       clinician: new FormControl(0),
       treatmentLocation: new FormControl(0),
@@ -68,7 +73,8 @@ export class PatientRegisterComponent
       studyId: new FormControl(null),
       subStudyParticipation: new FormControl(null),
       consent: new FormControl(null),
-      consentDate: new FormControl(null)
+      consentDate: new FormControl(null),
+      estimated: new FormControl(false)
     });
 
     this.projectListSub = this.route.data.subscribe((data: Data) => {
@@ -86,7 +92,7 @@ export class PatientRegisterComponent
     this.locationsListSub = this.route.data.subscribe((data: Data) => {
       this.treatmentLocations = data['treatmentlocations'];
     });
-
+    
     this.patientsChanged = this.repo.patientsChanged.subscribe((p) => {
       this.changesSaved = true;
       this.patientRegistrationForm.reset();
@@ -94,7 +100,10 @@ export class PatientRegisterComponent
     });
 
     this.errorsChanged = this.repo.errorsChanged.subscribe((e) => {
-      this.errors = e;
+      if (e.errors)
+      {
+        this.errors = e.errors;
+      }
     });
 
     this.setDefaults();
@@ -109,7 +118,7 @@ export class PatientRegisterComponent
       'middleName': '',
       'sex': 0,
       'dob': '',
-      'estdob': '0',
+      'estdob': '',
       'clinician': 0,
       'treatmentLocation': 0,
       'institution': 'Public',
@@ -122,111 +131,80 @@ export class PatientRegisterComponent
       'project': 0,
       'studyId': '',
       'subStudyParticipation': '',
-      'consent': '',
-      'consentDate': ''
-    });
-  }
-
-  changeSex(e: any) {
-    let sexVal = e.target.value;
-    this.patientSexId = parseInt(sexVal);
-
-    if (this.patientSexId === 0) {
-      this.patientRegistrationForm.setErrors({ invalidSex: true });
-    } else {
-      this.patientRegistrationForm.setErrors({ invalidSex: false });
-    }
-
-    this.patientRegistrationForm.get('sex')?.setValue(sexVal, {
-      onlySelf: true,
-    });
-  }
-
-  changeEDOB(e: any) {
-    console.log(e.target.value);
-    this.patientRegistrationForm.get('estdob')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-
-  changeClinician(e: any) {
-    this.patientRegistrationForm.get('clinician')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-
-  changeTreatmentLocation(e: any) {
-    let trVal = e.target.value;
-    this.treatmentLocationId = parseInt(trVal);
-
-    if (this.treatmentLocationId === 0) {
-      this.patientRegistrationForm.setErrors({ invalidLocation: true });
-    } else {
-      this.patientRegistrationForm.setErrors({ invalidLocation: false });
-    }
-
-    this.patientRegistrationForm.get('treatmentLocation')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-
-  changeProject(e: any) {
-    this.patientRegistrationForm.get('project')?.setValue(e.target.value, {
-      onlySelf: true,
+      'consent': false,
+      'consentDate': '',
+      'estimated': false
     });
   }
 
   savePatient() {
-    let clinicianId = parseInt(this.patientRegistrationForm.get('clinician')?.value);
-
-    if (this.patientSexId === 0)
+    if (this.selectedLocationId == 0)
     {
-      //this.patientRegistrationForm.setErrors({ invalidSex: true });
+      this.patientRegistrationForm.get('treatmentLocation')?.setErrors({ invalidLocation: true });
     }
 
-    if (clinicianId === 0) {
-      //this.patientRegistrationForm.setErrors({ invalidClinician: true });
+    if (this.selectedSexId == 0)
+    {
+      this.patientRegistrationForm.get('sex')?.setErrors({ invalidSex: true });
+    }
+
+    if (this.selectedClinicianId == 0) {
+      this.patientRegistrationForm.get('clinician')?.setErrors({ invalidClinician: true });
+    }
+
+    if (this.hasEstimatedDOB)
+    {
+      if (!this.eDob || this.eDob == '0') {
+        this.patientRegistrationForm.get('estdob')?.setErrors({ invalidEDOB: true });
+      }
+    }
+
+    if (this.hasConsented) {
+      const consentDate = this.patientRegistrationForm.get('consentDate')?.value;
+      if (!consentDate) {
+        this.patientRegistrationForm.get('consentDate')?.setErrors({ invalidConsentDate: true });
+      }
     }
 
     if (this.patientRegistrationForm.valid)
     {
-      const patient = new Patient(
-        0,
-        this.patientRegistrationForm.get('patientUIN')?.value,
-        this.patientRegistrationForm.get('hospitalUR')?.value,
-        this.patientRegistrationForm.get('hospital')?.value,
-        this.patientRegistrationForm.get('firstName')?.value,
-        this.patientRegistrationForm.get('lastName')?.value,
-        this.patientRegistrationForm.get('middleName')?.value,
-        new Date(),
-        this.patientRegistrationForm.get('estdob')?.value,
-        this.sexes.find(
-          (s) => s.sexId === parseInt(this.patientRegistrationForm.get('sex')?.value)
-        ),
-        this.patientRegistrationForm.get('medicareNo')?.value,
-        this.patientRegistrationForm.get('postcode')?.value,
-        this.treatmentLocations.find(
-          (tr) =>
-            tr.treatmentLocationId ===
-            parseInt(this.patientRegistrationForm.get('treatmentLocation')?.value)
-        ),
-        this.clinicians.find(
-          (c) =>
-            c.clinicianId ===
-            parseInt(this.patientRegistrationForm.get('clinician')?.value)
-        ),
-        this.patientRegistrationForm.get('institution')?.value,
-        this.patientRegistrationForm.get('studyCoordinator')?.value,
-        this.patientRegistrationForm.get('studyCoordinatorPhone')?.value,
-        this.patientRegistrationForm.get('comments')?.value,
-        this.projects.find((p) => p.projectId == parseInt(this.patientRegistrationForm.get('project')?.value)),
-        this.patientRegistrationForm.get('studyId')?.value,
-        true,
-        ''
-      );
-        
+      const patient = new Patient();
+
+      patient.patientSex = this.sexes.find((s) => s.sexId == this.selectedSexId);
+      patient.doctor = this.clinicians.find((c) => c.clinicianId == this.selectedClinicianId);
+      patient.patientSex = this.sexes.find((s) => s.sexId == this.selectedSexId);
+      patient.location = this.treatmentLocations.find((tr) => tr.treatmentLocationId == this.selectedLocationId);
+      patient.project = this.projects.find((p) => p.projectId == this.selectedProjectId);
+      patient.firstName = this.patientRegistrationForm.get('firstName')?.value;
+      patient.lastName = this.patientRegistrationForm.get('lastName')?.value;
+      patient.middle = this.patientRegistrationForm.get('middleName')?.value;
+      patient.estDOB = this.eDob;
+      patient.patientUIN = this.patientRegistrationForm.get('patientUIN')?.value;
+      patient.hospital = this.patientRegistrationForm.get('hospital')?.value;
+      patient.hospitalUR = this.patientRegistrationForm.get('hospitalUR')?.value;
+      patient.medicareNo = this.patientRegistrationForm.get('medicareNo')?.value;
+      patient.postCode = this.patientRegistrationForm.get('postcode')?.value;
+      patient.institution = this.selectedInstitution;
+      patient.studyCoordinator = this.patientRegistrationForm.get('studyCoordinator')?.value;
+      patient.studyId = this.patientRegistrationForm.get('studyId')?.value;
+      patient.comments = this.patientRegistrationForm.get('comments')?.value;
+      patient.isActive = true;
+      patient.dob = new Date(this.patientRegistrationForm.get('dob')?.value);
+      patient.hasConsented = this.hasConsented;
+
+      if (this.hasConsented) {
+        patient.consentDate = new Date(this.patientRegistrationForm.get('consentDate')?.value);
+      }
+
       console.log(patient);
-      this.repo.createPatient(JSON.parse(JSON.stringify(patient)));
+      // this.repo.createPatient(JSON.parse(JSON.stringify(patient)));
+    }
+  }
+
+  changeConsent(e: any) {
+    if (e.value == false)
+    {
+      this.patientRegistrationForm.patchValue({'consentDate': ''});
     }
   }
 

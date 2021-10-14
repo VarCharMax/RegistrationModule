@@ -51,6 +51,7 @@
               "projects/registration-app/src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "projects/registration-app/src/styles.css"
             ],
             "scripts": []
@@ -118,6 +119,7 @@
               "projects/registration-app/src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "projects/registration-app/src/styles.css"
             ],
             "scripts": []

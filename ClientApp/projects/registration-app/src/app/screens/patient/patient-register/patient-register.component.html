@@ -8,186 +8,221 @@
                 <table class="table-hover table table-condensed">
                     <tbody>
                         <tr>
-                            <td>UIN</td>
                             <td>
-                                <input
-                                type="text"
-                                id="patientUIN"
-                                formControlName="patientUIN"
-                                class="form-control">
-                                <span
-                                    *ngIf="!patientRegistrationForm.get('patientUIN')?.valid && patientRegistrationForm.get('patientUIN')?.touched"
-                                    class="help-block">This field is required.
-                                </span>
+                              <mat-form-field class="form-control" appearance="fill">
+                                <mat-label>Patient UIN</mat-label>
+                                <input formControlName="patientUIN" matInput value="">
+                              </mat-form-field>
+                              <mat-error *ngIf="patientRegistrationForm.get('patientUIN')?.hasError('required') && patientRegistrationForm.get('patientUIN')?.touched">
+                                This field is required.
+                              </mat-error>
                             </td>
-                            <td>Medicare Number</td>
                             <td>
-                                <input
+                              <mat-form-field class="form-control" appearance="fill">
+                              <mat-label>Medicare Number</mat-label>
+                                <input matInput
                                 type="text"
                                 id="medicareNo"
                                 formControlName="medicareNo"
                                 class="form-control">
+                              </mat-form-field>
                             </td>
                         </tr>
                         <tr>
-                            <td>First Name</td>
-                            <td>
-                                <input
-                                type="text"
-                                id="firstName"
-                                formControlName="firstName"
-                                class="form-control">
-                                <span
-                                    *ngIf="!patientRegistrationForm.get('firstName')?.valid && patientRegistrationForm.get('firstName')?.touched"
-                                    class="help-block">This field is required.
-                                </span>
-                            </td>
-                            <td>Last Name</td>
-                            <td>
-                                <input
-                                type="text"
-                                id="lastName"
-                                formControlName="lastName"
-                                class="form-control">
-                            <span
-                                *ngIf="!patientRegistrationForm.get('lastName')?.valid && patientRegistrationForm.get('lastName')?.touched"
-                                class="help-block">This field is required.
-                            </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Middle Name</td>
-                            <td>
-                                <input
-                                type="text"
-                                id="middleName"
-                                formControlName="middleName"
-                                class="form-control"></td>
-                            <td><label for="sex">Sex</label></td>
-                            <td>
-                                <select formControlName="sex" (change)="changeSex($event)">
-                                    <option value="0">Select ...</option>
-                                    <option *ngFor="let sex of sexes" value="{{sex.sexId}}">{{sex.description}}</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Date of birth<td>
-                                <input
-                                type="text"
-                                id="dob"
-                                formControlName="dob"
-                                class="form-control">
-                            <span
-                                *ngIf="!patientRegistrationForm.get('dob')?.valid && patientRegistrationForm.get('dob')?.touched"
-                                class="help-block">This field is required.
-                            </span>
-                            </td>
-                            <td>
-                               Est DOB
-                            </td>
-                            <td>
-                                <select formControlName="estdob" (change)="changeEDOB($event)">
-                                    <option value="0">Select ...</option>
-                                    <option *ngFor="let edob of estimatedDOB" value="{{edob}}">{{edob}}</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Postcode</td>
-                            <td><input
-                                type="text"
-                                id="postcode"
-                                formControlName="postcode"
-                                class="form-control">
-                                </td>
-                            <td>Hospital UR</td>
-                            <td><input
-                                type="text"
-                                id="hospitalUR"
-                                formControlName="hospitalUR"
-                                class="form-control">
-                                </td>
-                        </tr>
+                          <td>
+                            <mat-form-field class="form-control" appearance="fill">
+                              <mat-label>First Name</mat-label>
+                              <input matInput
+                              type="text"
+                              id="firstName"
+                              formControlName="firstName"
+                              class="form-control">
+                              <mat-error *ngIf="patientRegistrationForm.get('firstName')?.hasError('required') && patientRegistrationForm.get('firstName')?.touched">
+                                This field is required.
+                              </mat-error>
+                            </mat-form-field>
+                          </td>
+                          <td>
+                            <mat-form-field class="form-control" appearance="fill">
+                              <mat-label>Last Name</mat-label>
+                              <input matInput
+                              type="text"
+                              id="lastName"
+                              formControlName="lastName"
+                              class="form-control">
+                              <mat-error *ngIf="patientRegistrationForm.get('lastName')?.hasError('required') && patientRegistrationForm.get('lastName')?.touched">
+                                This field is required.
+                              </mat-error>
+                            </mat-form-field>
+                          </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <mat-form-field class="form-control" appearance="fill">
+                            <mat-label>Middle Name</mat-label>
+                            <input matInput
+                            type="text"
+                            id="middleName"
+                            formControlName="middleName"
+                            class="form-control">
+                          </mat-form-field>
+                        <td>
+                          <mat-form-field class="form-control" appearance="fill">
+                            <mat-label>Sex</mat-label>
+                            <mat-select matInput formControlName="sex" [(value)]="selectedSexId">
+                                <mat-option value="0">Select ...</mat-option>
+                                <mat-option *ngFor="let sex of sexes" value="{{sex.sexId}}">{{sex.description}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="patientRegistrationForm.get('sex')?.hasError('invalidSex')">
+                              This field is required.
+                            </mat-error>
+                          </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                      <td>
+                          <mat-form-field class="form-control" appearance="fill">
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput formControlName="dob" [matDatepicker]="dob">
+                            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                            <mat-datepicker #dob ></mat-datepicker>
+                            <mat-error *ngIf="patientRegistrationForm.get('dob')?.hasError('required') && patientRegistrationForm.get('dob')?.touched">
+                              This field is required.
+                            </mat-error>
+                          </mat-form-field>
+                        </td>
+                        <td>
+                          <div>
+                            <mat-checkbox formControlName="estimated" [(ngModel)]="hasEstimatedDOB" >Estimated</mat-checkbox><br/>
+                          </div>
+                          <div>
+                            <mat-form-field *ngIf="hasEstimatedDOB" class="form-control" appearance="fill">
+                              <mat-label>Est DOB</mat-label>
+                              <mat-select matInput formControlName="estdob" [(ngModel)]="eDob">
+                                  <mat-option value="0">Select ...</mat-option>
+                                  <mat-option *ngFor="let edob of estimatedDOB" value="{{edob}}">{{edob}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="patientRegistrationForm.get('estdob')?.hasError('invalidEDOB')">
+                                This field is required.
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <mat-form-field class="form-control" appearance="fill">
+                          <mat-label>Postcode</mat-label>
+                          <input matInput
+                            type="text"
+                            id="postcode"
+                            formControlName="postcode"
+                            class="form-control">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field class="form-control" appearance="fill">
+                          <mat-label>Hospital UR</mat-label>
+                          <input matInput
+                            type="text"
+                            id="hospitalUR"
+                            formControlName="hospitalUR"
+                            class="form-control">
+                        </mat-form-field>
+                      </td>
+                      </tr>
                     </tbody>
                 </table>
             </div>
-        <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
-            <div class="panel-heading" >Treatment Location</div>
+            <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
+              <div class="panel-heading">Treatment Location</div>
+              <div class="panel-body" >
+                  <table class="table-hover table table-condensed">
+                      <tbody>
+                          <tr>
+                              <td>
+                                <mat-form-field class="form-control" appearance="fill">
+                                  <mat-label>Treatment Location</mat-label>
+                                  <mat-select matInput formControlName="treatmentLocation" [(value)]="selectedLocationId">
+                                      <mat-option value="0">Select ... </mat-option>
+                                      <mat-option *ngFor="let location of treatmentLocations" value="{{location.treatmentLocationId}}">{{location.location}}</mat-option>
+                                  </mat-select>
+                                  <mat-error *ngIf="patientRegistrationForm.get('treatmentLocation')?.hasError('invalidLocation')">
+                                    This field is required.
+                                  </mat-error>
+                                </mat-form-field>
+                              </td>
+                              <td>
+                                <mat-form-field class="form-control" appearance="fill">
+                                  <mat-label>Hospital</mat-label>
+                                  <input matInput
+                                  type="text"
+                                  id="hospital"
+                                  formControlName="hospital"
+                                  class="form-control">
+                                </mat-form-field>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                <mat-form-field class="form-control" appearance="fill">
+                                  <mat-label>Consenting Clinician</mat-label>
+                                  <mat-select matInput formControlName="clinician" [(value)]="selectedClinicianId">
+                                      <mat-option value="0">Select ...</mat-option>
+                                      <mat-option *ngFor="let clinician of clinicians" value="{{ clinician.clinicianId }}">{{clinician.firstName}} {{clinician.lastName}}</mat-option>
+                                  </mat-select>
+                                  <mat-error *ngIf="patientRegistrationForm.get('clinician')?.hasError('invalidClinician')">
+                                    This field is required.
+                                  </mat-error>
+                                </mat-form-field>
+                              </td>
+                              <td>
+                                <mat-label>Institution Type</mat-label>
+                                  <mat-radio-group matInput formControlName="institution" [(ngModel)]="selectedInstitution" aria-label="Institution Type">
+                                    <mat-radio-button [value]="institution" *ngFor="let institution of institutions">{{institution}}</mat-radio-button>
+                                  </mat-radio-group>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                <mat-form-field class="form-control" appearance="fill">
+                                  <mat-label>Name of Study Co-ordinator</mat-label>
+                                  <input matInput
+                                  type="text"
+                                  id="studyCoordinator"
+                                  formControlName="studyCoordinator"
+                                  class="form-control">
+                                </mat-form-field>
+                              </td>
+                              <td>
+                                <mat-form-field class="form-control" appearance="fill">
+                                  <mat-label>Study co-ordinator phone</mat-label>
+                                  <input matInput
+                                  type="text"
+                                  id="studyCoordinatorPhone"
+                                  formControlName="studyCoordinatorPhone"
+                                  class="form-control">
+                                </mat-form-field>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
+            <div class="panel-heading">Comments</div>
             <div class="panel-body" >
                 <table class="table-hover table table-condensed">
                     <tbody>
                         <tr>
-                            <td>Treatment Location</td>
                             <td>
-                                <select formControlName="treatmentLocation" (change)="changeTreatmentLocation($event)">
-                                    <option value="0">Select ... </option>
-                                    <option *ngFor="let location of treatmentLocations" value="{{location.treatmentLocationId}}">{{location.location}}</option>
-                                </select>
-                            </td>
-                            <td>Hospital</td>
-                            <td>
-                                <input
-                                type="text"
-                                id="hospital"
-                                formControlName="hospital"
-                                class="form-control">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Consenting Clinician</td>
-                            <td>
-                                <select formControlName="clinician" (change)="changeClinician($event)">
-                                    <option value="0">Select ...</option>
-                                    <option *ngFor="let clinician of clinicians" value="{{ clinician.clinicianId }}">{{clinician.firstName}} {{clinician.lastName}}</option>
-                                </select>
-                            </td>
-                            <td>Institution Type</td>
-                            <td>
-                                <div class="radio" *ngFor="let institution of institutions">
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        formControlName="institution"
-                                        [value]="institution">{{ institution }}
-                                    </label>
-                                  </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Name of Study Co-ordinator</td>
-                            <td>
-                                <input
-                                type="text"
-                                id="studyCoordinator"
-                                formControlName="studyCoordinator"
-                                class="form-control">
-                            </td>
-                            <td>Study co-ordinator phone</td>
-                            <td>
-                                <input
-                                type="text"
-                                id="studyCoordinatorPhone"
-                                formControlName="studyCoordinatorPhone"
-                                class="form-control">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
-            <div class="panel-heading" >Comments</div>
-            <div class="panel-body" >
-                <table class="table-hover table table-condensed">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <input
+                              <mat-form-field class="form-control" appearance="fill">
+                                <input matInput
                                 type="text"
                                 id="comments"
                                 formControlName="comments"
                                 class="form-control">
+                              </mat-form-field>
                             </td>
                         </tr>
                     </tbody>
@@ -195,25 +230,29 @@
             </div>
         </div>
         <div class="panel panel-default" style="border-top-left-radius:13px;border-top-right-radius:13px;" >
-            <div class="panel-heading" >Project</div>
+            <div class="panel-heading">Project</div>
             <div class="panel-body" >
                 <table class="table-hover table table-condensed">
                     <tbody>
                         <tr>
-                            <td>Project</td>
                             <td>
-                                <select formControlName="project" (change)="changeProject($event)">
-                                    <option value="0">Select ...</option>
-                                    <option *ngFor="let project of projects" value="{{ project.projectId }}">{{project.name}}</option>
-                                </select>
+                              <mat-form-field class="form-control" appearance="fill">
+                                <mat-label>Project</mat-label>
+                                <mat-select matInput formControlName="project" [(value)]="selectedProjectId">
+                                    <mat-option matInput value="0">Select ...</mat-option>
+                                    <mat-option matInput *ngFor="let project of projects" value="{{ project.projectId }}">{{project.name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
                             </td>
-                            <td>Study ID</td>
                             <td>
-                                <input
+                              <mat-form-field class="form-control" appearance="fill">
+                                <mat-label>Study ID</mat-label>
+                                <input matInput
                                 type="text"
                                 id="studyId"
                                 formControlName="studyId"
                                 class="form-control">
+                              </mat-form-field>
                             </td>
                         </tr>
                     </tbody>
@@ -226,35 +265,35 @@
                 <table class="table-hover table table-condensed">
                     <tbody>
                         <tr>
-                            <td>Sub-study Participation</td>
                             <td>
-                                <select formControlName="project" (change)="changeProject($event)">
-                                    <option value="0">Select ...</option>
-                                    <option *ngFor="let project of projects" value="{{ project.projectId }}">{{project.name}}</option>
-                                </select>
+                              <mat-form-field class="form-control" appearance="fill">
+                                <mat-label>Sub-study Participation</mat-label>
+                                <input matInput
+                                type="text"
+                                id="studyId"
+                                formControlName="studyId"
+                                class="form-control">
+                              </mat-form-field>
                             </td>
-                            <td>Has the participant (or guardian) provided informed consent?</td>
                             <td>
-                                <div class="radio" *ngFor="let consent of consents">
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        formControlName="consent"
-                                        [value]="consent">{{ consent }}
-                                    </label>
-                                  </div>
+                                <mat-label>Has the participant (or guardian)<br />provided informed consent?</mat-label><br />
+                                <mat-radio-group matInput formControlName="consent" [(ngModel)]="hasConsented" aria-label="Select an option" (change)="changeConsent($event)">
+                                  <mat-radio-button [value]="false">No</mat-radio-button>
+                                  <mat-radio-button [value]="true">Yes</mat-radio-button>
+                                </mat-radio-group>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                Date of consent
-                            </td>
-                            <td>
-                                <input
-                                type="text"
-                                id="consentDate"
-                                formControlName="consentDate"
-                                class="form-control">
+                              <mat-form-field class="form-control" appearance="fill">
+                                <mat-label>Date of consent</mat-label>
+                                <input matInput formControlName="consentDate" [matDatepicker]="consentDate" placeholder="Choose a date">
+                                <mat-datepicker-toggle matSuffix [for]="consentDate"></mat-datepicker-toggle>
+                                <mat-datepicker #consentDate ></mat-datepicker>
+                                <mat-error *ngIf="patientRegistrationForm.get('consentDate')?.hasError('invalidConsentDate')">
+                                  This field is required.
+                                </mat-error>
+                              </mat-form-field>
                             </td>
                         </tr>
                     </tbody>
@@ -264,4 +303,5 @@
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>
     </div>
-</div>
+  </div>
+  

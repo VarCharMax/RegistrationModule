@@ -98,7 +98,7 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
         'consentDate': this.patient.consentDate
       });
     });
-
+    
     this.projectListSub = this.route.data.subscribe((data: Data) => {
       this.projects = data['projects'];
     });

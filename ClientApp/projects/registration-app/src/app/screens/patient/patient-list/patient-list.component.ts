@@ -27,13 +27,15 @@ export class PatientListComponent implements OnInit, OnDestroy {
     this.patientsListSub = this.route.data.subscribe((data: Data) => {
       this.patients = data['patients'];
     });
-
+    
     /*
     this.patientsChanged = this.repo.patientsChanged.subscribe((p) => {
       this.patients = p;
     });
-    this.repo.getPatients();
     */
+
+    // this.repo.getPatients();
+    
   }
 
   newPatient() {
