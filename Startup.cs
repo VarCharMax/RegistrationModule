@@ -1,3 +1,6 @@
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -5,8 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Polly;
+using RegistrationModule.Classes;
 using RegistrationModule.Data;
+using RegistrationModule.Services;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RegistrationModule
 {
@@ -38,6 +47,95 @@ namespace RegistrationModule
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; //"Cookies"
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+
+                Configuration.GetSection("CookieAuthenticationDefaults:Cookie").Bind(options);
+
+                //options.Cookie.Name = ".AspNet.SharedCookie";
+                //options.Cookie.Domain = ".biogrid.org.au";
+                //options.Cookie.Path = "/";
+
+                options.ExpireTimeSpan = TimeSpan.FromHours(Configuration.GetValue<int>("CookieAuthenticationDefaults:Expires"));
+
+                options.Events.OnSigningIn = e =>
+                {
+
+
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnSignedIn = e =>
+                {
+                    var d = e.HttpContext;
+
+
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnSigningOut = async e =>
+                {
+                    // automatically revoke refresh token at signout time
+                    await e.HttpContext.RevokeUserRefreshTokenAsync();
+                };
+            })
+            .AddOpenIdConnect("oidc", options =>
+            {
+                Configuration.GetSection("OpenIdConnect").Bind(options);
+
+                options.Scope.Clear();
+
+                Configuration.GetValue<List<string>>("AllowedScopes").ForEach(s => options.Scope.Add(s));
+
+                //options.Scope.Add("openid");
+                //options.Scope.Add("profile");
+                //options.Scope.Add("offline_access");
+
+                Configuration.GetValue<List<string>>("ApiScopes").ForEach(s => options.Scope.Add(s)); ;
+
+                //options.ClaimActions.MapJsonKey("website", "website");
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = JwtClaimTypes.Name,
+                    RoleClaimType = JwtClaimTypes.Role
+                };
+
+                //options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                //options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+            });
+
+            var filterConfig = new FilterConfig
+            {
+                Host = Configuration.GetValue<string>("OpenIdConnect:Authority"),
+                ApplicationName = Configuration.GetValue<string>("OpenIdConnect:ClientId")
+            };
+
+            services.AddSingleton(filterConfig);
+            services.AddHttpContextAccessor();
+            services.AddScoped<UserManagerService>();
+
+            services.AddAccessTokenManagement()
+                .ConfigureBackchannelHttpClient()
+                .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(new[]
+                {
+                    TimeSpan.FromSeconds(1),
+                    TimeSpan.FromSeconds(2),
+                    TimeSpan.FromSeconds(3)
+                }));
+
+            //Create clients that use the access token
+            services.AddUserAccessTokenClient("api_client", client =>
+            {
+                client.BaseAddress = new Uri("");
+            });
+
+
 
             services.AddRazorPages();
         }

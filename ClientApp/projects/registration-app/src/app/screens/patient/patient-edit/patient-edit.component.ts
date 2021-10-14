@@ -37,6 +37,16 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
   estimatedDOB = ['A', 'D', 'DM', 'DMY', 'DY', 'MY', 'Y'];
   consents = [true, false];
 
+  estimated: FormControl = new FormControl();
+  selectedClinicianId: number = 0;
+  selectedSexId: number = 0;
+  selectedLocationId: number = 0;
+  selectedProjectId: number = 0;
+  selectedInstitution: string = 'Public';
+  hasConsented: boolean = false;
+  hasEstimatedDOB: boolean = false;
+  eDob: string ='';
+
   constructor(
     private repo: Repository,
     private router: Router,
@@ -52,7 +62,7 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
       lastName: new FormControl(null, Validators.required),
       middleName: new FormControl(null),
       sex: new FormControl(null),
-      dob: new FormControl(null),
+      dob: new FormControl(null, Validators.required),
       estdob: new FormControl(null),
       clinician: new FormControl(null),
       treatmentLocation: new FormControl(0),
@@ -67,7 +77,8 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
       studyId: new FormControl(null),
       subStudyParticipation: new FormControl(null),
       consent: new FormControl(null),
-      consentDate: new FormControl(null)
+      consentDate: new FormControl(null),
+      estimated: new FormControl(false)
     });
 
     this.patientSub = this.route.data.subscribe((data: Data) => {
@@ -80,8 +91,8 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
         'lastName': this.patient.lastName,
         'middleName': this.patient.middle,
         'sex': this.patient.patientSex?.sexId,
-        'dob': formatDate(this.patient.dob!, 'dd/MM/yyy', 'en-AU'),
-        'estdob': this.patient.estDOB || 'A',
+        'dob': this.patient.dob,
+        'estdob': this.patient.estDOB,
         'clinician': this.patient?.doctor?.clinicianId,
         'treatmentLocation': this.patient.location?.treatmentLocationId,
         'institution': this.patient.institution,
@@ -119,54 +130,26 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
       this.errors = e;
     });
   }
-
-  changeEDOB(e: any) {
-    this.patientEditForm.get('estdob')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
+ 
+  changeConsent(e: any) {
+    if (e.value == false)
+    {
+      this.patientEditForm.patchValue({'consentDate': ''});
+    }
   }
 
-  changeSex(e: any) {
-    this.patientEditForm.get('sex')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-
-  changeClinician(e: any) {
-    this.patientEditForm.get('clinician')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-
-  changeTreatmentLocation(e: any) {
-    this.patientEditForm.get('treatmentLocation')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-
-  changeInstitution(e: any) {
-    this.patientEditForm.get('institution')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-
-  changeProject(e: any) {
-    this.patientEditForm.get('project')?.setValue(e.target.value, {
-      onlySelf: true,
-    });
-  }
-  
   updatePatient() {
 
     if (this.patientEditForm.valid)
     {
-      this.patientChanged = this.repo.patientChanged.subscribe((p) => {
-        this.changesSaved = true;
-        this.patientEditForm.reset();
-        // this.router.navigate(['..'], { relativeTo: this.route });
-      });
+        this.patientChanged = this.repo.patientChanged.subscribe((p) => {
+          this.changesSaved = true;
+          this.patientEditForm.reset();
+          // this.router.navigate(['..'], { relativeTo: this.route });
+        });
 
-      const patient = new Patient(
+        /*
+        const patient = new Patient(
         this.patient.patientId,
         this.patientEditForm.get('patientUIN')?.value,
         this.patientEditForm.get('hospitalUR')?.value,
@@ -199,11 +182,54 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
         this.patientEditForm.get('studyId')?.value,
         true,
       ); 
+*/
 
-      // BUG: Can't seem to save comments via constructor. For some reason, they get saved to the isActive property.
-        // patient.comments = this.patientEditForm.get('comments')?.value;
-          console.log(patient)
-        this.repo.replacePatient(patient);
+      if (this.hasEstimatedDOB)
+      {
+        if (!this.eDob || this.eDob == '0') {
+          this.patientEditForm.get('estdob')?.setErrors({ invalidEDOB: true });
+        }
+      }
+
+      if (this.hasConsented) {
+        const consentDate = this.patientEditForm.get('consentDate')?.value;
+        console.log('consentDate ' + consentDate);
+        if (!consentDate) {
+          this.patientEditForm.get('consentDate')?.setErrors({ invalidConsentDate: true });
+        }
+      }
+
+      const patient = new Patient();
+      
+      patient.patientId = this.patient.patientId,
+      patient.patientSex = this.sexes.find((s) => s.sexId == this.selectedSexId);
+      patient.doctor = this.clinicians.find((c) => c.clinicianId == this.selectedClinicianId);
+      patient.patientSex = this.sexes.find((s) => s.sexId == this.selectedSexId);
+      patient.location = this.treatmentLocations.find((tr) => tr.treatmentLocationId == this.selectedLocationId);
+      patient.project = this.projects.find((p) => p.projectId == this.selectedProjectId);
+      patient.firstName = this.patientEditForm.get('firstName')?.value;
+      patient.lastName = this.patientEditForm.get('lastName')?.value;
+      patient.middle = this.patientEditForm.get('middleName')?.value;
+      patient.estDOB = this.eDob;
+      patient.patientUIN = this.patientEditForm.get('patientUIN')?.value;
+      patient.hospital = this.patientEditForm.get('hospital')?.value;
+      patient.hospitalUR = this.patientEditForm.get('hospitalUR')?.value;
+      patient.medicareNo = this.patientEditForm.get('medicareNo')?.value;
+      patient.postCode = this.patientEditForm.get('postcode')?.value;
+      patient.institution = this.selectedInstitution;
+      patient.studyCoordinator = this.patientEditForm.get('studyCoordinator')?.value;
+      patient.studyId = this.patientEditForm.get('studyId')?.value;
+      patient.comments = this.patientEditForm.get('comments')?.value;
+      patient.isActive = true;
+      patient.dob = new Date(this.patientEditForm.get('dob')?.value);
+      patient.hasConsented = this.hasConsented;
+
+      if (this.hasConsented) {
+        patient.consentDate = new Date(this.patientEditForm.get('consentDate')?.value);
+      }
+
+      console.log(patient)
+      // this.repo.replacePatient(patient);
     }
   }
 

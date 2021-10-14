@@ -53,6 +53,8 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\projects\registration-app\src\app\services\" />
+    <Folder Include="Filters\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
