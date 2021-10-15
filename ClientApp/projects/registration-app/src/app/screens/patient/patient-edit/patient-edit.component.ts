@@ -1,4 +1,4 @@
-import { ActivatedRoute, Data, Params, Router } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -10,7 +10,6 @@ import { Project } from 'projects/models/project.model';
 import { Repository } from 'projects/modules/repository';
 import { Sex } from 'projects/models/sex.model';
 import { TreatmentLocation } from 'projects/models/treatmentlocation.model';
-import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-patient-edit',
@@ -36,7 +35,6 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
   institutions = ['Public', 'Private'];
   estimatedDOB = ['A', 'D', 'DM', 'DMY', 'DY', 'MY', 'Y'];
   consents = [true, false];
-
   estimated: FormControl = new FormControl();
   selectedClinicianId: number = 0;
   selectedSexId: number = 0;
@@ -104,7 +102,7 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
         'comments': this.patient.comments,
         'project': this.patient.project?.projectId,
         'studyId': this.patient.studyId,
-        'subStudyParticipation': '',
+        'subStudyParticipation': this.patient.subStudyParticipation,
         'consent': this.patient.hasConsented,
         'consentDate': this.patient.consentDate
       });
@@ -220,7 +218,6 @@ export class PatientEditComponent implements OnInit, OnDestroy, CanComponentDeac
       patient.studyCoordinator = this.patientEditForm.get('studyCoordinator')?.value;
       patient.studyId = this.patientEditForm.get('studyId')?.value;
       patient.comments = this.patientEditForm.get('comments')?.value;
-      patient.isActive = true;
       patient.dob = new Date(this.patientEditForm.get('dob')?.value);
       patient.hasConsented = this.hasConsented;
 

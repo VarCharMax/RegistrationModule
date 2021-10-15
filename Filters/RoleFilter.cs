@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RegistrationModule.Services;
 using Serilog;
 
-namespace MvcClient.Filters
+namespace RegistrationModule.Filters
 {
     public class RoleFilter : ActionFilterAttribute
     {
